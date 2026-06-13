@@ -2643,7 +2643,6 @@ function cpu_ep2_register ( sim_p )
 							{
                                                             var new_maddr  = null ;
                                                             var mcelto     = null ;
-							    var signal_obj = null ;
 
 						            // measure time (1/2)
 					                    var t0 = performance.now() ;
@@ -2680,7 +2679,7 @@ function cpu_ep2_register ( sim_p )
 							         set_value(signal_obj, signal_obj.default_value);
 						            }
                                                             for (const [key, value] of Object.entries(get_value(mcelto))) {
-							         signal_obj = sim_p.signals[key] ;
+							         const signal_obj = sim_p.signals[key] ;
                                                                  if (typeof signal_obj != "undefined") {
                                                                      set_value(signal_obj, value) ;
                                                                  }
@@ -2705,7 +2704,9 @@ function cpu_ep2_register ( sim_p )
 																	// for its state and for firing its dependencies
 																	if (signal_obj.changed && !sim_p.internal_states.fire_done[key]) {
 																		sim_p.internal_states.fire_done[key] = true;
-																		fn_updateL_now(key);
+																		if ("L" == signal_obj.type) {
+																			update_state(key);
+																		}
 																	}
 																}
 																// Necessary to update the A0A1 mux A
@@ -2714,6 +2715,10 @@ function cpu_ep2_register ( sim_p )
 
 						            // measure time (2/2)
 					                    var t1 = performance.now() ;
+
+										if (typeof wepsim_svg_is_drawing === 'function' && wepsim_svg_is_drawing()){
+											refresh();
+										}
 
 						            // update time
 							    var val = get_value(sim_p.states["ACC_TIME"]) ;
