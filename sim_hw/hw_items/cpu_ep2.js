@@ -600,7 +600,7 @@ function cpu_ep2_register ( sim_p )
 			           draw_data: [['svg_p:path3083','svg_p:path3089', 'svg_p:path3597', 'svg_p:path3513', 'svg_p:path3601', 'svg_p:path3601-2', 'svg_p:path3187', 'svg_p:path3087', 'svg_p:path2995','svg_p:path3535']],
 			           draw_name: [['svg_p:path3085']] };
 	 sim_p.signals["TD"]   = { name: "TD",  visible: true, type: "L", value: 0, default_value:0, nbits: "1",
-			           behavior: ["NOP; CHECK_RTD", "MV BUS_DB REG_MBR; FIRE_IFSET W 1; CHECK_RTD"],
+			           behavior: ["NOP; CHECK_RTD", "MV BUS_DB REG_MBR; CHECK_RTD"],
 			           fire_name: ['svg_p:text3103'],
 			           draw_data: [['svg_p:path3545','svg_p:path3093','svg_p:path3101','svg_p:path3587','svg_p:path3515','svg_p:path3071','svg_p:path3419','svg_p:path3099','svg_p:path3097','svg_p:path3559-5','svg_p:path3419-1-0','svg_p:path3583','svg_p:path3419-1','svg_p:path3491','svg_p:path3541']],
 			           draw_name: [['svg_p:path3095']] };
@@ -667,7 +667,7 @@ function cpu_ep2_register ( sim_p )
 			           draw_name: [['svg_p:path3133-6-9-7-5']] };
 	/* MUX. */
 	 sim_p.signals["M1"]   = { name: "M1", visible: true, type: "L",  value: 0, default_value:0, nbits: "1",
-			           behavior: ["FIRE_ONE BUS_IB_FIRE; MV M1_C1 BUS_IB", "MV M1_C1 BUS_DB"], // BUS_DB updated with IO
+			           behavior: ["FIRE_ONE BUS_IB_FIRE; MV M1_C1 BUS_IB", "FIRE_IFSET_ONE R 1; FIRE_IFSET_ONE W 1; MV M1_C1 BUS_DB"], // BUS_DB updated with IO
                                    depends_on: ["C1"],
 			           fire_name: ['svg_p:text3469'],
 			           draw_data: [['svg_p:path3063','svg_p:path3061','svg_p:path3059'], ['svg_p:path3057','svg_p:path3419','svg_p:path3583', 'svg_p:path3491', 'svg_p:path3087-7']],
