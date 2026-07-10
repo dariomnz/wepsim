@@ -1716,6 +1716,17 @@
     "testing": false
   },
   {
+    "id": "RVP1E11_wokwi",
+    "title": "Wokwi",
+    "type": "<span data-langkey='Pipeline'>Pipeline</span>",
+    "modes": "rvpipe",
+    "hardware": "rvpipe",
+    "microcode": "rvpipe",
+    "assembly": "rvpipe_s1e11_wokwi",
+    "description": "Simple example to use wokwi elements in pipeline.",
+    "testing": false
+  },
+  {
     "id": "RVR1E1",
     "title": "Instructions",
     "type": "<span data-langkey='Initial'>Initial</span>",

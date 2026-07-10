@@ -231,6 +231,7 @@ declare function io_clk_base_register(sim_p: Simulator): void;
 declare function io_screen_base_register(sim_p: Simulator): void;
 declare function io_screen_rvpipe_register(sim_p: Simulator): void;
 declare function io_keyboard_rvpipe_register(sim_p: Simulator): void;
+declare function io_wokwi_rvpipe_register(sim_p: Simulator): void;
 declare function io_ldm_base_register(sim_p: Simulator): void;
 declare function io_l3d_base_register(sim_p: Simulator): void;
 declare function io_sound_base_register(sim_p: Simulator): void;

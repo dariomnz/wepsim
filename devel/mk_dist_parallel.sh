@@ -79,7 +79,8 @@ echo "  * ws_dist"
                     touch    ws_dist/index.html
                     mkdir -p ws_dist/external
                     touch    ws_dist/external/index.html
-cp external/jquery.min.js    ws_dist/external
+cp external/jquery.min.js           ws_dist/external
+cp external/wokwi-elements.min.js   ws_dist/external
                     mkdir -p ws_dist/help
                     touch    ws_dist/help/index.html
 
@@ -138,6 +139,7 @@ PARALLEL_PIDS=""
       sim_hw/ts_out/hw_items/io_clk_rvpipe.js \
       sim_hw/ts_out/hw_items/io_screen_rvpipe.js \
       sim_hw/ts_out/hw_items/io_keyboard_rvpipe.js \
+      sim_hw/ts_out/hw_items/io_wokwi_rvpipe.js \
       sim_hw/hw_items/io_keyboard_base.js \
       sim_hw/hw_items/io_ldm_base.js \
       sim_hw/hw_items/io_l3d_base.js \
@@ -283,6 +285,7 @@ PARALLEL_PIDS="${PARALLEL_PIDS}${PARALLEL_PIDS:+ }$!"
       wepsim_web/wepsim_uielto_l3d.js \
       wepsim_web/wepsim_uielto_ldm.js \
       wepsim_web/wepsim_uielto_sound.js \
+      wepsim_web/wepsim_uielto_wokwi.js \
       \
       wepsim_web/wepsim_uipacker_ddown_sel.js \
       wepsim_web/wepsim_uipacker_ddown_info.js \
@@ -421,6 +424,7 @@ PARALLEL_PIDS="${PARALLEL_PIDS}${PARALLEL_PIDS:+ }$!"
   cp -a external/speechkitt            ws_dist/external/
                                     touch ws_dist/external/speechkitt/index.html
   cp -a external/cordova.js            ws_dist/external/cordova.js
+  cp -a external/wokwi-elements.min.js ws_dist/external/wokwi-elements.min.js
 } &
 PARALLEL_PIDS="${PARALLEL_PIDS}${PARALLEL_PIDS:+ }$!"
 

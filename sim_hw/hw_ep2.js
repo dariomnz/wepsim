@@ -51,6 +51,7 @@
                  io_l3d_base_register ( ep2_def ) ;
                  io_ldm_base_register ( ep2_def ) ;
                io_sound_base_register ( ep2_def ) ;
+               io_wokwi_rvpipe_register(ep2_def);
 
             simhw_add(ep2_def) ;
 

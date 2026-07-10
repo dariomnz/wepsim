@@ -48,6 +48,7 @@ mem_rvpipe_register(rvpipe_def);
 io_screen_rvpipe_register(rvpipe_def);
 io_keyboard_rvpipe_register(rvpipe_def);
 io_clk_rvpipe_register(rvpipe_def);
+io_wokwi_rvpipe_register(rvpipe_def);
 // io_l3d_base_register(rvpipe_def);
 // io_ldm_base_register(rvpipe_def);
 // io_sound_base_register(rvpipe_def);

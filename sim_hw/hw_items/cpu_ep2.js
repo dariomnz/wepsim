@@ -853,12 +853,12 @@ function cpu_ep2_register ( sim_p )
 
 	/* I/O Devices */
 	 sim_p.signals["IOR"]   = { name: "IOR", visible: true, type: "L", value: 0, default_value:0, nbits: "1",
-				     behavior: ["NOP", "MOVE_BITS KBD_IOR 0 1 IOR; MOVE_BITS SCR_IOR 0 1 IOR; MOVE_BITS L3D_IOR 0 1 IOR; MOVE_BITS L3D_IOR 0 1 IOR; MOVE_BITS SND_IOR 0 1 IOR; FIRE_IFSET KBD_IOR 1; FIRE_IFSET SCR_IOR 1; FIRE_IFSET L3D_IOR 1; FIRE_IFSET LEDM_IOR 1; FIRE_IFSET SND_IOR 1"],
+				     behavior: ["NOP", "MOVE_BITS KBD_IOR 0 1 IOR; MOVE_BITS SCR_IOR 0 1 IOR; MOVE_BITS L3D_IOR 0 1 IOR; MOVE_BITS L3D_IOR 0 1 IOR; MOVE_BITS SND_IOR 0 1 IOR; FIRE_IFSET KBD_IOR 1; FIRE_IFSET SCR_IOR 1; FIRE_IFSET L3D_IOR 1; FIRE_IFSET LEDM_IOR 1; FIRE_IFSET SND_IOR 1; WOKWI_IOR BUS_AB BUS_DB CLK;"],
 				     fire_name: ['svg_p:text3715'],
 				     draw_data: [[], ['svg_p:path3733', 'svg_p:path3491', 'svg_p:text3715']],
 				     draw_name: [[], []]};
 	 sim_p.signals["IOW"]   = { name: "IOW", visible: true, type: "L", value: 0, default_value:0, nbits: "1",
-				     behavior: ["NOP", "MOVE_BITS SCR_IOW 0 1 IOW; MOVE_BITS IO_IOW 0 1 IOW; MOVE_BITS L3D_IOW 0 1 IOW; MOVE_BITS LEDM_IOW 0 1 IOW; MOVE_BITS SND_IOW 0 1 IOW; FIRE_IFSET SCR_IOW 1; FIRE_IFSET IO_IOW 1; FIRE_IFSET L3D_IOW 1; FIRE_IFSET LEDM_IOW 1; FIRE_IFSET SND_IOW 1"],
+				     behavior: ["NOP", "MOVE_BITS SCR_IOW 0 1 IOW; MOVE_BITS IO_IOW 0 1 IOW; MOVE_BITS L3D_IOW 0 1 IOW; MOVE_BITS LEDM_IOW 0 1 IOW; MOVE_BITS SND_IOW 0 1 IOW; FIRE_IFSET SCR_IOW 1; FIRE_IFSET IO_IOW 1; FIRE_IFSET L3D_IOW 1; FIRE_IFSET LEDM_IOW 1; FIRE_IFSET SND_IOW 1; WOKWI_IOW BUS_AB BUS_DB CLK;"],
 				     fire_name: ['svg_p:text3717'],
 				     draw_data: [[], ['svg_p:path3735', 'svg_p:path3491', 'svg_p:text3717']],
 				     draw_name: [[], []]};

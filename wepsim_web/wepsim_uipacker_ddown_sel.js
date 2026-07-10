@@ -137,7 +137,7 @@
                                      'CPU':          [ 'all', 'mc', 'cpu' ],
                                      'Main Memory':  [ 'mp', 'mpcfg' ],
                                      'Cache Memory': [ 'cm', 'cmcfg' ],
-                                     'Devices':      [ 'con', 'ioldm', 'io', 'iocfg', 'iol3d', 'sound' ],
+                                     'Devices':      [ 'con', 'wokwi', 'ioldm', 'io', 'iocfg', 'iol3d', 'sound' ],
                                      'Simulation':   [ 'ed_mc', 'ed_mp' ]
                                  //  'Simulation':   [ 'ed_hw', 'ed_mc', 'ed_mp' ]
                                   } ;
@@ -186,6 +186,10 @@
 			       ioldm: '      <a class="dropdown-item" href="#" id="s5b_27" value="27"' +
 				      '	 onclick="wsweb_set_details(\'LEDMATRIX\');' +
 				      '		  return false;"><span class="bg-dark text-white">Dev</span>&nbsp;<span data-langkey=\'Led-Matrix\'>Led-Matrix</span></a>',
+			      wokwi: '      <a class="dropdown-item" href="#" id="s5b_31" value="31"' +
+				      '	 onclick="wsweb_set_details(\'WOKWI\');' +
+				      '		  return false;"><span class="bg-dark text-white">Dev</span>&nbsp;<span data-langkey=\'Wokwi\'>Wokwi</span> <span class="badge text-bg-secondary py-0 px-1">beta</span></a>',
+
 			       sound: '      <a class="dropdown-item" href="#" id="s5b_30" value="30"' +
 				      '	 onclick="wsweb_set_details(\'SOUND\');' +
 				      '		  return false;"><span class="bg-dark text-white">Dev</span>&nbsp;<span data-langkey=\'Sound\'>Sound</span> <span class="badge text-bg-secondary py-0 px-1">beta</span></a>',

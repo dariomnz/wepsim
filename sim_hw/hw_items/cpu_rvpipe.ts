@@ -2348,7 +2348,7 @@ function cpu_rvpipe_register(sim_p: Simulator): Simulator {
     /* IOR: I/O Read - call device read behaviors */
     sim_p.signals[SIGNALS.IOR] = {
         name: "IOR", visible: true, type: "L", value: 0, default_value: 0, nbits: "1",
-        behavior: [create_op(BEHAVIORS.NOP), create_op(BEHAVIORS.SCR_IOR, STATES.BUS_AB, STATES.BUS_DB, STATES.DDR, STATES.DSR, STATES.CLK) + create_op(BEHAVIORS.KBD_IOR, STATES.BUS_AB, STATES.BUS_DB, STATES.KBDR, STATES.KBSR, STATES.CLK) + "IO_IOR BUS_AB BUS_DB IOSR IOCR IODR CLK;"],
+        behavior: [create_op(BEHAVIORS.NOP), create_op(BEHAVIORS.SCR_IOR, STATES.BUS_AB, STATES.BUS_DB, STATES.DDR, STATES.DSR, STATES.CLK) + create_op(BEHAVIORS.KBD_IOR, STATES.BUS_AB, STATES.BUS_DB, STATES.KBDR, STATES.KBSR, STATES.CLK) + "IO_IOR BUS_AB BUS_DB IOSR IOCR IODR CLK;" + "WOKWI_IOR BUS_AB BUS_DB CLK;"],
         depends_on: [SIGNALS.AUX_LOAD_MEM, SIGNALS.M5],
         fire_name: [],
         draw_data: [[], []],
@@ -2357,7 +2357,7 @@ function cpu_rvpipe_register(sim_p: Simulator): Simulator {
     /* IOW: I/O Write - call device write behaviors */
     sim_p.signals[SIGNALS.IOW] = {
         name: "IOW", visible: true, type: "L", value: 0, default_value: 0, nbits: "1",
-        behavior: [create_op(BEHAVIORS.NOP), create_op(BEHAVIORS.SCR_IOW, STATES.BUS_AB, STATES.BUS_DB, STATES.DDR, STATES.DSR, STATES.CLK) + "IO_IOW BUS_AB BUS_DB IOSR IOCR IODR CLK;"],
+        behavior: [create_op(BEHAVIORS.NOP), create_op(BEHAVIORS.SCR_IOW, STATES.BUS_AB, STATES.BUS_DB, STATES.DDR, STATES.DSR, STATES.CLK) + "IO_IOW BUS_AB BUS_DB IOSR IOCR IODR CLK;" + "WOKWI_IOW BUS_AB BUS_DB CLK;"],
         depends_on: [SIGNALS.AUX_LOAD_MEM, SIGNALS.M5],
         fire_name: [],
         draw_data: [[], []],

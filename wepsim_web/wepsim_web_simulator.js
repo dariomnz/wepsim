@@ -406,6 +406,16 @@
                                     set_screen_content: wepsim_set_screen_content
 	                      },
 
+	    "WOKWI":          {
+		                                  init: function() {
+							   var o = document.querySelector("ws-wokwi") ;
+							   if (o !== null) o.render() ;
+						        },
+		                                 reset: function() {
+			                                   return true ;
+	                                                }
+	                      },
+
 	    "SOUND":          {
 		                                  init: function() {
 						           return true ;

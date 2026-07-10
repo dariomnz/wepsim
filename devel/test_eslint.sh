@@ -146,7 +146,8 @@ echo "checking wepsim_web..."
             ./wepsim_web/wepsim_uielto_timer_info.js \
             ./wepsim_web/wepsim_uielto_l3d.js \
             ./wepsim_web/wepsim_uielto_ldm.js \
-            ./wepsim_web/wepsim_uielto_sound.js
+            ./wepsim_web/wepsim_uielto_sound.js \
+            ./wepsim_web/wepsim_uielto_wokwi.js
 
      eslint ./wepsim_web/wepsim_uielto_bin_asm.js \
             ./wepsim_web/wepsim_uielto_bin_mc.js

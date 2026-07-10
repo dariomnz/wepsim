@@ -128,6 +128,7 @@
                    ni.cm    = this.mk_nav_item('tab28', '#cm',    'Cache',                '', '') ;
                    ni.cmcfg = this.mk_nav_item('tab29', '#cmcfg', 'Cache configuration',  '', '') ;
                    ni.sound = this.mk_nav_item('tab30', '#sound', 'Sound',                '', '') ;
+                   ni.wokwi = this.mk_nav_item('tab31', '#wokwi', 'Wokwi',                '', '') ;
 
                    return ni ;
 	      }
@@ -160,6 +161,7 @@
 	           np.cm    = this.mk_nav_tabpane_item('cm',    '',  '<ws-cachememory></ws-cachememory>') ;
 	           np.cmcfg = this.mk_nav_tabpane_item('cmcfg', '',  '<ws-cache-config id="cmcfg1"></ws-cache-config>') ;
 	           np.sound = this.mk_nav_tabpane_item('sound', '',  '<ws-sound></ws-sound>') ;
+	           np.wokwi = this.mk_nav_tabpane_item('wokwi', '',  '<ws-wokwi></ws-wokwi>') ;
 
                    return np ;
 	      }
