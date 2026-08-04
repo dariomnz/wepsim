@@ -35,7 +35,7 @@ function wepsimPostBuildPlugin()
 
             // 1. Build Node.js CLI
             console.time('\n[post-build] Building Node.js CLI');
-            await build({ configFile: path.resolve(rootDir, 'vite.config.node.ts'), logLevel: 'warn' });
+            await build({ configFile: path.resolve(rootDir, 'vite.config.node.ts') });
 
             // 2. Copy i18n help HTML files
             console.timeEnd('\n[post-build] Building Node.js CLI');
