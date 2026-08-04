@@ -75,6 +75,8 @@ export class ws_cpusvg extends ws_uielto
             '</div>' ;
 
         this.innerHTML = o1 ;
+
+        set_ab_size('#eltos_cpu_a', '#eltos_cpu_b', parseInt(get_cfg('CPUCU_size'))) ;
     }
 }
 

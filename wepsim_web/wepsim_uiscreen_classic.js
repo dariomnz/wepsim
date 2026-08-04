@@ -25,6 +25,7 @@ import { get_cfg } from '../sim_core/sim_cfg.js';
 import { simhw_active } from '../sim_hw/sim_hw_index.js';
 import { resolve_html_url, wepsim_help_set } from '../wepsim_core/wepsim_help.js';
 import { wsweb_dialog_open } from './wepsim_web_api.js';
+import { set_ab_size } from './wepsim_web_simulator.js';
 
 /*
          *  Simulation: classic
@@ -119,6 +120,8 @@ export class ws_uiscreen_classic extends ws_uielto
 
         // load HTML
         this.innerHTML = o1 ;
+
+        set_ab_size('#col1', '#col2', parseInt(get_cfg('C1C2_size'))) ;
     }
 
     render_populate_classic_toolbars ()

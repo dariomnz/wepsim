@@ -19,6 +19,8 @@
  */
 import { ws_uielto, register_uielto } from './wepsim_uielto.js';
 import { wepsim_quickcfg_init } from './wepsim_web_ui_quickcfg.js';
+import { set_ab_size } from './wepsim_web_simulator.js';
+import { get_cfg } from '../sim_core/sim_cfg.js';
 
 /*
          *  Simulation: compact
@@ -89,6 +91,8 @@ export class ws_uiscreen_compact extends ws_uielto
 
         // load HTML
         this.innerHTML = o1 ;
+
+        set_ab_size('#col1', '#col2', parseInt(get_cfg('C1C2_size'))) ;
 
         // initialize loaded components
         wepsim_quickcfg_init('slidercfg') ;
