@@ -24,10 +24,11 @@ import { simhw_active, simhw_internalState, simhw_internalState_reset } from '..
 import { get_var, set_var } from '../sim_core/sim_core_values.js';
 import { cache_memory_init, cache_memory_init_eltofromcfg, cache_memory_init_eltonextcache } from '../sim_core/sim_adt_cachememory.js';
 
+var name_str_cmcfg = 'cmcfg' ;
+
 /*
-         *  Cache memory (configuration)
-         */
-/* jshint esversion: 6 */
+*  Cache memory (configuration)
+*/
 export class ws_cache_config extends ws_uielto
 {
     constructor ()
@@ -96,7 +97,7 @@ export function wepsim_show_cm_level_cfg_bits(memory_cfg, index)
         '<tbody>' +
         '<tr>' +
         "    <td align='center' class='border border-0 border-tertiary'>" +
-        "    <div id='via_size_" + index + '_' + this.name_str + "'>Id.: " +
+        "    <div id='via_size_" + index + '_' + name_str_cmcfg + "'>Id.: " +
         "    <input type='number' " +
         "           value='" + get_var(memory_cfg_i.cfg.via_size) + "' " +
         "           data-bind='change' data-action='cm-update-cfg' data-index='" + index + "' data-field='via_size' " +
@@ -117,7 +118,7 @@ export function wepsim_show_cm_level_cfg_bits(memory_cfg, index)
         "    <td align='center' class='border border-0 border-tertiary'>&nbsp;</td>" +
         '' +
         "    <td align='center' class='border border-0 border-tertiary'>" +
-        "    <div id='off_size_" + index + '_' + this.name_str + "'>Offset: " +
+        "    <div id='off_size_" + index + '_' + name_str_cmcfg + "'>Offset: " +
         "    <input type='number' " +
         "           value='" + get_var(memory_cfg_i.cfg.off_size) + "' " +
         "           data-bind='change' data-action='cm-update-cfg' data-index='" + index + "' data-field='off_size' " +
@@ -138,12 +139,12 @@ export function wepsim_show_cm_level_cfg_bits(memory_cfg, index)
 export function wepsim_show_cm_level_cfg_splitunify(memory_cfg, index)
 {
     var o = "  <div class='row mb-3'>" +
-        "    <label for='su_pol_" + index + '_' + this.name_str + "' " +
+        "    <label for='su_pol_" + index + '_' + name_str_cmcfg + "' " +
         "           class='col-xs-12 col-md-4 col-form-label' " +
         "    ><span data-langkey='Split/unified'>Split/unified</span></label>" +
         "    <div class='col-xs-12 col-md-8'>" +
         "    <select class='form-select form-control' " +
-        "            id='su_pol_" + index + '_' + this.name_str + "' " +
+        "            id='su_pol_" + index + '_' + name_str_cmcfg + "' " +
         "            data-bind='change' data-action='cm-update-cfg' data-index='" + index + "' data-field='su_pol'" +
         "            aria-label='Replace policy'>" +
         "      <option value='unify' selected>Unified</option>" +
@@ -162,12 +163,12 @@ export function wepsim_show_cm_level_cfg_splitunify(memory_cfg, index)
 export function wepsim_show_cm_level_cfg_replacepol(memory_cfg, index)
 {
     var o = "  <div class='row mb-3'>" +
-        "    <label for='replace_pol_" + index + '_' + this.name_str + "' " +
+        "    <label for='replace_pol_" + index + '_' + name_str_cmcfg + "' " +
         "           class='col-xs-12 col-md-4 col-form-label' " +
         "    ><span data-langkey='Replace policy'>Replace policy</span></label>" +
         "    <div class='col-xs-12 col-md-8'>" +
         "    <select class='form-select' " +
-        "            id='replace_pol_" + index + '_' + this.name_str + "' " +
+        "            id='replace_pol_" + index + '_' + name_str_cmcfg + "' " +
         "            data-bind='change' data-action='cm-update-cfg' data-index='" + index + "' data-field='replace_pol'" +
         "            aria-label='Replace policy'>" +
         "      <option value='lfu' selected>LFU</option>" +
@@ -185,12 +186,12 @@ export function wepsim_show_cm_level_cfg_replacepol(memory_cfg, index)
 export function wepsim_show_cm_level_cfg_placepol(memory_cfg, index)
 {
     var o = "  <div class='row mb-3'>" +
-        "    <label for='replace_cpp_" + index + '_' + this.name_str + "' " +
+        "    <label for='replace_cpp_" + index + '_' + name_str_cmcfg + "' " +
         "           class='col-xs-12 col-md-4 col-form-label'" +
         "    ><span data-langkey='Cache placement policy'>Cache placement policy</span></label>" +
         "    <div class='col-xs-12 col-md-8'>" +
         "    <select class='form-select' " +
-        "            id='replace_cpp_" + index + '_' + this.name_str + "' " +
+        "            id='replace_cpp_" + index + '_' + name_str_cmcfg + "' " +
         "            data-bind='change' data-action='cm-update-placement' data-index='" + index + "'" +
         "            aria-label='Cache placement policy'>" +
         "      <option value='fa' selected>Fully associative</option>" +
@@ -258,12 +259,12 @@ export function wepsim_show_cm_level_cfg_placepol(memory_cfg, index)
 export function wepsim_show_cm_level_cfg_nextcm(memory_cfg, index)
 {
     var o = "<div class='row mb-3'>" +
-        "  <label for='su_pol_" + index + '_' + this.name_str + "' " +
+        "  <label for='su_pol_" + index + '_' + name_str_cmcfg + "' " +
         "         class='col-xs-12 col-md-4 col-form-label' " +
         "  ><span data-langkey='Next Cache'>Next Cache</span></label>" +
         "  <div class='col-xs-12 col-md-8'>" +
         "  <select class='form-select form-control' " +
-        "          id='su_next_" + index + '_' + this.name_str + "' " +
+        "          id='su_next_" + index + '_' + name_str_cmcfg + "' " +
         "          data-bind='change' data-action='cm-update-next' data-index='" + index + "'" +
         "          aria-label='Next Cache'>" ;
     onChange('cm-update-next', (el) =>
@@ -349,7 +350,7 @@ export function wepsim_show_cache_memory_cfg(div_hash, memory_cfg)
         "<span class='col h5 ps-1'>" +
         "  <span data-langkey='Cache'>Cache</span>" +
         '  <span class=\'btn btn-sm btn-success text-white py-0\' ' +
-        '        data-bind=\'click\' data-action=\'cm-add-level\ data-divhash=\'' + div_hash + '\' data-memlength=\'' + memory_cfg.length + '\'>Add new</span>' +
+        '        data-bind=\'click\' data-action=\'cm-add-level\' data-divhash=\'' + div_hash + '\' data-memlength=\'' + memory_cfg.length + '\'>Add new</span>' +
         '</span>' +
         "<span class='col border border-secondary border-2 opacity-75 align-middle mt-3'></span>" +
         "<span class='col h5 ps-1'>" +
