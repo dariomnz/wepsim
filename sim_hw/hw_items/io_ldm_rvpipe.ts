@@ -301,30 +301,6 @@ export function io_ldm_rvpipe_register(sim_p: Simulator): Simulator
                     sim_p.internal_states.ledm_sync = false;
                 }
             }
-
-            // sync: internal state -> frame in REST
-            if (!sim_p.internal_states.ledm_sync)
-            {
-                const ledmstates = sim_p.internal_states.ledm_state;
-                let o            = '';
-                const n          = sim_p.internal_states.ledm_dim;
-                for (let j = 0; j < n; j++)
-                {
-                    for (let k = 0; k < n; k++)
-                    {
-                        const p3 = j * sim_p.internal_states.ledm_dim + k;
-                        o        = o + get_var(ledmstates[p3].color).toString(16);
-                    }
-                }
-
-                if (sim_p.internal_states.ledm_frame != o)
-                {
-                    sim_p.internal_states.ledm_frame = o;
-                    simcore_rest_call('LEDM', 'POST', '/', { 'frame': o });
-                }
-
-                sim_p.internal_states.ledm_sync = true;
-            }
         },
         verbal: function (s_expr: string[]): string
         {
@@ -384,6 +360,44 @@ export function io_ldm_rvpipe_register(sim_p: Simulator): Simulator
         verbal: function (): string
         {
             return 'Reset the I/O device. ';
+        },
+    };
+
+    sim_p.behaviors['LEDM_SYNC'] = {
+        nparameters: 1,
+        operation:   function (): void
+        {
+            if (DEBUG) console.log('[LEDM_SYNC] sync');
+
+            if (sim_p.internal_states.ledm_sync)
+            {
+                return;
+            }
+
+            // internal state -> frame in REST
+            const ledmstates = sim_p.internal_states.ledm_state;
+            let o            = '';
+            const n          = sim_p.internal_states.ledm_dim;
+            for (let j = 0; j < n; j++)
+            {
+                for (let k = 0; k < n; k++)
+                {
+                    const p = j * sim_p.internal_states.ledm_dim + k;
+                    o       = o + get_var(ledmstates[p].color).toString(16);
+                }
+            }
+
+            if (sim_p.internal_states.ledm_frame != o)
+            {
+                sim_p.internal_states.ledm_frame = o;
+                simcore_rest_call('LEDM', 'POST', '/', { 'frame': o });
+            }
+
+            sim_p.internal_states.ledm_sync = true;
+        },
+        verbal: function (): string
+        {
+            return 'Sync State with Device. ';
         },
     };
 

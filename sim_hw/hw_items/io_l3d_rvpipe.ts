@@ -220,33 +220,6 @@ export function io_l3d_rvpipe_register(sim_p: Simulator): Simulator
                     set_value(sim_p.states[s_expr[3]], 0);
                 }
             }
-
-            // sync: internal state -> frame in REST
-            const l3dstates = sim_p.internal_states.l3d_state;
-            let o           = '';
-            let p2          = 0;
-            const n         = sim_p.internal_states.l3d_dim;
-            for (let i = 0; i < n; i++)
-            {
-                for (let j = 0; j < n; j++)
-                {
-                    for (let k = 0; k < n; k++)
-                    {
-                        p2 = k * Math.pow(sim_p.internal_states.l3d_dim, 2) +
-                            j * sim_p.internal_states.l3d_dim +
-                            i;
-                        if (get_var(l3dstates[p2].active))
-                            o = o + '1';
-                        else o = o + '0';
-                    }
-                }
-            }
-
-            if (sim_p.internal_states.l3d_frame != o)
-            {
-                sim_p.internal_states.l3d_frame = o;
-                simcore_rest_call('L3D', 'POST', '/', { 'frame': o });
-            }
         },
         verbal: function (s_expr: string[]): string
         {
@@ -283,6 +256,45 @@ export function io_l3d_rvpipe_register(sim_p: Simulator): Simulator
         verbal: function (): string
         {
             return 'Reset the I/O device. ';
+        },
+    };
+
+    sim_p.behaviors['L3D_SYNC'] = {
+        nparameters: 1,
+        operation:   function (): void
+        {
+            if (DEBUG) console.log('[L3D_SYNC] sync');
+
+            // internal state -> frame in REST
+            const l3dstates = sim_p.internal_states.l3d_state;
+            let o           = '';
+            let p           = 0;
+            const n         = sim_p.internal_states.l3d_dim;
+            for (let i = 0; i < n; i++)
+            {
+                for (let j = 0; j < n; j++)
+                {
+                    for (let k = 0; k < n; k++)
+                    {
+                        p = k * Math.pow(sim_p.internal_states.l3d_dim, 2) +
+                            j * sim_p.internal_states.l3d_dim +
+                            i;
+                        if (get_var(l3dstates[p].active))
+                            o = o + '1';
+                        else o = o + '0';
+                    }
+                }
+            }
+
+            if (sim_p.internal_states.l3d_frame != o)
+            {
+                sim_p.internal_states.l3d_frame = o;
+                simcore_rest_call('L3D', 'POST', '/', { 'frame': o });
+            }
+        },
+        verbal: function (): string
+        {
+            return 'Sync State with Device. ';
         },
     };
 
