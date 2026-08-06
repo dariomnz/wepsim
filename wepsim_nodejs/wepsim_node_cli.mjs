@@ -56,8 +56,8 @@ function ws_help_usage ()
 
 function ws_open_file (filename)
 {
-    var ret = {} ;
-    ret.data = '' ;
+    var ret    = {} ;
+    ret.data   = '' ;
     ret.status = false ;
 
     try
@@ -67,11 +67,11 @@ function ws_open_file (filename)
     catch (err)
     {
         ret.status = false ;
-        ret.data = 'ERROR: file "' + filename + '" doesn\'t exits\n\n' ;
+        ret.data   = 'ERROR: file "' + filename + '" doesn\'t exits\n\n' ;
         return ret ;
     }
 
-    ret.data = fs.readFileSync(filename, 'utf8') ;
+    ret.data   = fs.readFileSync(filename, 'utf8') ;
     ret.status = true ;
     return ret ;
 }
@@ -79,7 +79,7 @@ function ws_open_file (filename)
 function ws_help_examples_basic ()
 {
     var o = ws_header() ;
-    o += 'Examples for running some work and show the...:\n' +
+    o    += 'Examples for running some work and show the...:\n' +
         ' * ...final state:\n' +
         '   ./wepsim.sh -a run -m ep -f ./repo/microcode/mips/ep_sig1_base.mc -s ./repo/assembly/mips/s1e1.asm\n' +
         ' * ...modified state on each assembly instruction executed:\n' +
@@ -218,24 +218,24 @@ export async function ws_main ()
             return false ;
         }
 
-        var options = {} ;
+        var options               = {} ;
         options.instruction_limit = parseInt(argv.maxi) ;
-        options.cycles_limit = parseInt(argv.maxc) ;
-        options.verbalize = (argv.verbal.toUpperCase() == 'MATH') ? 'math' : 'text' ;
-        options.purify = argv.purify ;
+        options.cycles_limit      = parseInt(argv.maxc) ;
+        options.verbalize         = (argv.verbal.toUpperCase() == 'MATH') ? 'math' : 'text' ;
+        options.purify            = argv.purify ;
 
-        var data = {} ;
-        data.mode = argv.mode ;
-        data.action = argv.action.toUpperCase() ;
-        data.firmware = '' ;
-        data.assembly = '' ;
-        data.record = '' ;
+        var data       = {} ;
+        data.mode      = argv.mode ;
+        data.action    = argv.action.toUpperCase() ;
+        data.firmware  = '' ;
+        data.assembly  = '' ;
+        data.record    = '' ;
         data.result_ok = '' ;
-        data.idiom = argv.idiom ;
+        data.idiom     = argv.idiom ;
 
-        var ret = {} ;
+        var ret    = {} ;
         ret.status = true ;
-        ret.data = '' ;
+        ret.data   = '' ;
 
         if (argv.checkpoint !== '')
         {
@@ -243,12 +243,12 @@ export async function ws_main ()
             if (ret.status)
             {
                 var obj_checkpoint = wepsim_nodejs_loadCheckpoint(ret.data) ;
-                data.mode = obj_checkpoint.mode ;
-                data.firmware = obj_checkpoint.firmware ;
-                data.assembly = obj_checkpoint.assembly ;
-                data.record = obj_checkpoint.record ;
-                data.obj_chk = obj_checkpoint ;
-                data.str_chk = ret.data ;
+                data.mode          = obj_checkpoint.mode ;
+                data.firmware      = obj_checkpoint.firmware ;
+                data.assembly      = obj_checkpoint.assembly ;
+                data.record        = obj_checkpoint.record ;
+                data.obj_chk       = obj_checkpoint ;
+                data.str_chk       = ret.data ;
             }
         }
 

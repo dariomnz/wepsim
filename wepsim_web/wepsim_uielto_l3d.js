@@ -22,7 +22,7 @@ import { ws_uielto } from './wepsim_uielto.js';
 import { compute_general_behavior } from '../sim_hw/sim_hw_behavior.js';
 import { simcore_rest_add } from '../sim_core/sim_core_rest.js';
 import { simhw_active, simhw_internalState } from '../sim_hw/sim_hw_index.js';
-import { vue_appyBinding, vue_observable_ifnotjetdone } from '../sim_core/sim_core_values.js';
+import { reactive_wrap, reactive_bind_input } from '../sim_core/sim_core_values.js';
 
 /*
          *  L3D device
@@ -104,7 +104,7 @@ export class ws_l3d extends ws_uielto
             "       class='table table-hover table-sm table-bordered m-0 collapse'>" +
             '<tr><td>' +
             "<label class='my-0 text-wrap' for='l3d_apirest_endpoint'>REST URL (e.g.: http://localhost:5000/matrix)</label>" +
-            "<input id='l3d_apirest_endpoint' type='text' v-model.lazy='value' class='form-control text-info p-0'>" +
+            "<input id='l3d_apirest_endpoint' type='text' class='form-control text-info p-0'>" +
             '</td></tr>' +
             '</table>' +
             '' +
@@ -120,10 +120,9 @@ export class ws_l3d extends ws_uielto
                 {
                     offset = i * Math.pow(l3d_dim, 2) + j * l3d_dim + k ;
 
-                    o1 += "<td align='center' id=\"l3d" + offset + "_context\" class='py-0' " +
-                        "    v-on:click='value = !value'>" +
+                    o1 += "<td align='center' id=\"l3d" + offset + "_context\" class='py-0'>" +
                         l3d_svg_icon(offset, k) +
-                        "<span class='visually-hidden'>{{value}}</span>" +
+                        "<span class='visually-hidden'></span>" +
                         '</td>' ;
                 }
                 o1 += '</tr>' ;
@@ -136,21 +135,41 @@ export class ws_l3d extends ws_uielto
 
         $(div_hash).html(o1) ;
 
-        // vue binding
-        var f_computed_value = function(value)
-        {
-            webui_l3d_set() ;
-            return value ;
-        } ;
-
+        // bind reactive state to DOM elements
         for (i = 0; i < l3d_states.length; i++)
         {
-            l3d_states[i].active = vue_observable_ifnotjetdone(l3d_states[i].active) ;
-            vue_appyBinding(l3d_states[i].active, '#l3d' + i + '_context', f_computed_value) ;
-        }
+            l3d_states[i].active = reactive_wrap(l3d_states[i].active) ;
 
-        l3d_apirest_endpoint = vue_observable_ifnotjetdone(l3d_apirest_endpoint) ;
-        vue_appyBinding(l3d_apirest_endpoint, '#l3d_apirest_endpoint', f_computed_value) ;
+            (function (idx)
+            {
+                var td    = document.getElementById('l3d' + idx + '_context') ;
+                var span  = td ? td.querySelector('.visually-hidden') : null ;
+                var onEl  = td ? td.querySelector('.l3d-icon-on') : null ;
+                var offEl = td ? td.querySelector('.l3d-icon-off') : null ;
+                var store = l3d_states[idx].active ;
+
+                var update = function ()
+                {
+                    if (onEl) onEl.style.display = store.value ? '' : 'none' ;
+                    if (offEl) offEl.style.display = store.value ? 'none' : '' ;
+                    if (span) span.textContent = store.value ;
+                    webui_l3d_set() ;
+                } ;
+                store.subscribe(update, 'l3d' + idx + '_context') ;
+                if (onEl) onEl.style.display = store.value ? '' : 'none' ;
+                if (offEl) offEl.style.display = store.value ? 'none' : '' ;
+                if (span) span.textContent = store.value ;
+
+                if (td) td.addEventListener('click', function ()
+                {
+                    store.value = !store.value ;
+                }) ;
+            })(i) ;
+        }
+        webui_l3d_set() ;
+
+        l3d_apirest_endpoint = reactive_wrap(l3d_apirest_endpoint) ;
+        reactive_bind_input(l3d_apirest_endpoint, '#l3d_apirest_endpoint') ;
     }
 }
 
@@ -171,12 +190,12 @@ export function l3d_svg_icon(offset, k)
 {
     var id_str = 'l3d' + offset + '_svg' ;
 
-    var icon = "<span v-show='value'>" +
+    var icon = "<span class='l3d-icon-on'>" +
         "<i id='" + id_str + "' " +
         "   style='transform:skew(" + (15 - 10 * k) + "deg) translateY(-5px) scale(1.2)'" +
         "   class='fas fa-lightbulb'></i>" +
         '</span>' +
-        "<span v-show='!value'>" +
+        "<span class='l3d-icon-off'>" +
         "<i id='" + id_str + "' " +
         "   style='transform:skew(" + (15 - 10 * k) + "deg) translateY(-5px) scale(1.2)'" +
         "   class='far fa-lightbulb'></i>" +

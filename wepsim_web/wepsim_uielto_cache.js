@@ -21,7 +21,7 @@ import $ from 'jquery';
 import { ws_uielto, register_uielto } from './wepsim_uielto.js';
 import { onClick } from './wepsim_web_actions.js';
 import { get_var } from '../sim_core/sim_core_values.js';
-import { vue_observable_ifnotjetdone, vue_appyBinding } from '../sim_core/sim_core_values.js';
+import { reactive_wrap, reactive_bind_text } from '../sim_core/sim_core_values.js';
 import { simhw_active, simhw_internalState } from '../sim_hw/sim_hw_index.js';
 
 import { wsweb_set_details_select } from './wepsim_web_api.js';
@@ -76,10 +76,9 @@ export class ws_cachememory extends ws_uielto
         var o1 = wepsim_show_cache_memory_skel(cm_ref) ;
         $(div_hash).html(o1) ;
 
-        // vue binding
         for (var i = 0; i < cm_ref.length; i++)
         {
-            wepsim_show_cache_vueinit(i + 1, cm_ref[i]) ;
+            wepsim_show_cache_init(i + 1, cm_ref[i]) ;
         }
     }
 }
@@ -101,20 +100,20 @@ export function wepsim_show_cache_stats(level, memory)
 
     o1 += "  <ul class='mb-1 ps-3'>" +
         '  <li> ' +
-        "#access <span class='badge bg-info' id='" + p1 + "n_access'>{{ value }}</span> = " +
-        "#hits   <span class='badge bg-info' id='" + p1 + "n_hits'  >{{ value }}</span> + " +
-        "#misses <span class='badge bg-info' id='" + p1 + "n_misses'>{{ value }}</span>   " +
+        "#access <span class='badge bg-info' id='" + p1 + "n_access'></span> = " +
+        "#hits   <span class='badge bg-info' id='" + p1 + "n_hits'  ></span> + " +
+        "#misses <span class='badge bg-info' id='" + p1 + "n_misses'></span>   " +
         '  </li>\n' +
         '  <li>\n' +
-        "<span>hit-ratio  <span class='badge bg-success' id='" + p1 + "hitratio' >{{ computed_value }}</span></span> & " +
-        "<span>miss-ratio <span class='badge bg-danger'  id='" + p1 + "missratio'>{{ computed_value }}</span></span>\n" +
+        "<span>hit-ratio  <span class='badge bg-success' id='" + p1 + "hitratio' ></span></span> & " +
+        "<span>miss-ratio <span class='badge bg-danger'  id='" + p1 + "missratio'></span></span>\n" +
         '  </li>\n' +
         "  <li class='my-2'>Last access: " +
-        "<span class='badge bg-secondary' id='" + p1 + "last_r_w' >{{ computed_value }}</span>" +
+        "<span class='badge bg-secondary' id='" + p1 + "last_r_w' ></span>" +
         ' address ' +
-        "<span class='badge bg-secondary' id='" + p1 + "last_addr'>{{ computed_value }}</span>" +
-        "<span                            id='" + p1 + "lhm_1'    >{{ computed_value }}</span>" + // " was a " +
-        "<span class='badge bg-secondary' id='" + p1 + "lhm_2'    >{{ computed_value }}</span>" + // <hit/miss>
+        "<span class='badge bg-secondary' id='" + p1 + "last_addr'></span>" +
+        "<span                            id='" + p1 + "lhm_1'    ></span>" + // " was a " +
+        "<span class='badge bg-secondary' id='" + p1 + "lhm_2'    ></span>" + // <hit/miss>
         '  </li>\n' +
         "<div class='table-responsive'>" +
         "<table class='table table-bordered table-hover table-sm w-auto'>" ;
@@ -123,24 +122,24 @@ export function wepsim_show_cache_stats(level, memory)
     {
         // full-associative
         o1 += '<thead><tr><td>Tag: ' + t_sz + ' bits</td><td>Offset: ' + o_sz + ' bits</td></tr></thead>' +
-            "<tbody><tr><td><span id='" + p1 + "lp_tag'>{{ computed_value }}</span></td>" +
-            "<td><span id='" + p1 + "lp_off'>{{ computed_value }}</span></td></tr></tbody>" ;
+            "<tbody><tr><td><span id='" + p1 + "lp_tag'></span></td>" +
+            "<td><span id='" + p1 + "lp_off'></span></td></tr></tbody>" ;
     }
     else if (get_var(memory.cfg.via_size) == get_var(memory.cfg.set_size))
     {
         // direct-mapped
         o1 += '<thead><tr><td>Tag: ' + t_sz + ' bits</td><td>Index: ' + s_sz + '</td><td>Offset: ' + o_sz + '</td></tr></thead>' +
-            "<tbody><tr><td><span id='" + p1 + "lp_tag'>{{ computed_value }}</span></td>" +
-            "<td><span id='" + p1 + "lp_set'>{{ computed_value }}</span></td>" +
-            "<td><span id='" + p1 + "lp_off'>{{ computed_value }}</span></td></tr></tbody>" ;
+            "<tbody><tr><td><span id='" + p1 + "lp_tag'></span></td>" +
+            "<td><span id='" + p1 + "lp_set'></span></td>" +
+            "<td><span id='" + p1 + "lp_off'></span></td></tr></tbody>" ;
     }
     else
     {
         // set associative
         o1 += '<thead><tr><td>Tag: ' + t_sz + ' bits</td><td>Set: ' + s_sz + '</td><td>Offset: ' + o_sz + '</td></tr></thead>' +
-            "<tbody><tr><td><span id='" + p1 + "lp_tag'>{{ computed_value }}</span></td>" +
-            "<td><span id='" + p1 + "lp_set'>{{ computed_value }}</span></td>" +
-            "<td><span id='" + p1 + "lp_off'>{{ computed_value }}</span></td></tr></tbody>" ;
+            "<tbody><tr><td><span id='" + p1 + "lp_tag'></span></td>" +
+            "<td><span id='" + p1 + "lp_set'></span></td>" +
+            "<td><span id='" + p1 + "lp_off'></span></td></tr></tbody>" ;
     }
 
     o1 += '</table></div>' +
@@ -260,8 +259,7 @@ export function wepsim_show_cache_memory_i(level)
     o1 = wepsim_show_cache_content(level, cm_i) ;
     $('#cm-info-cnt-ph-' + level).html(o1) ;
 
-    // binding for vue...
-    wepsim_show_cache_vueinit(level, cm_i) ;
+    wepsim_show_cache_init(level, cm_i) ;
 }
 
 export function wepsim_show_cache_memory_skel(cache_memory)
@@ -372,7 +370,7 @@ export function wepsim_show_cache_memory_skel(cache_memory)
     return o1 ;
 }
 
-export function wepsim_show_cache_vueinit(level, memory)
+export function wepsim_show_cache_init(level, memory)
 {
     var p1 = '#cache_l' + level + '_stats_' ;
 
@@ -380,153 +378,153 @@ export function wepsim_show_cache_vueinit(level, memory)
 
     /*
             * o1 += "  <li> " +
-            *       "#access <span class='badge bg-info' id='" + p1 + "n_access'>{{ value }}</span> = " +
-            *       "#hits   <span class='badge bg-info' id='" + p1 + "n_hits'  >{{ value }}</span> + " +
-            *       "#misses <span class='badge bg-info' id='" + p1 + "n_misses'>{{ value }}</span>   " +
+            *       "#access <span class='badge bg-info' id='" + p1 + "n_access'></span> = " +
+            *       "#hits   <span class='badge bg-info' id='" + p1 + "n_hits'  ></span> + " +
+            *       "#misses <span class='badge bg-info' id='" + p1 + "n_misses'></span>   " +
             *       "  </li>\n" ;
             */
 
-    memory.stats.n_access = vue_observable_ifnotjetdone(memory.stats.n_access) ;
-    vue_appyBinding(memory.stats.n_access, p1 + 'n_access', function(value)
+    memory.stats.n_access = reactive_wrap(memory.stats.n_access) ;
+    reactive_bind_text(memory.stats.n_access, p1 + 'n_access', function(value)
     {
         return value;
     }) ;
 
-    memory.stats.n_hits = vue_observable_ifnotjetdone(memory.stats.n_hits) ;
-    vue_appyBinding(memory.stats.n_hits, p1 + 'n_hits', function(value)
+    memory.stats.n_hits = reactive_wrap(memory.stats.n_hits) ;
+    reactive_bind_text(memory.stats.n_hits, p1 + 'n_hits', function(value)
     {
         return value;
     }) ;
 
-    memory.stats.n_misses = vue_observable_ifnotjetdone(memory.stats.n_misses) ;
-    vue_appyBinding(memory.stats.n_misses, p1 + 'n_misses', function(value)
+    memory.stats.n_misses = reactive_wrap(memory.stats.n_misses) ;
+    reactive_bind_text(memory.stats.n_misses, p1 + 'n_misses', function(value)
     {
         return value;
     }) ;
 
     /*
             * o1 += "  <li>\n" +
-            *       "<span>hit-ratio  <span class='badge bg-success' id='" + p1 + "hitratio' >{{ .._value }}</span></span> & " +
-            *       "<span>miss-ratio <span class='badge bg-danger'  id='" + p1 + "missratio'>{{ .._value }}</span></span>\n" +
+            *       "<span>hit-ratio  <span class='badge bg-success' id='" + p1 + "hitratio' ></span></span> & " +
+            *       "<span>miss-ratio <span class='badge bg-danger'  id='" + p1 + "missratio'></span></span>\n" +
             *       "  </li>\n" ;
             */
 
-    vue_appyBinding(memory.stats.n_access,
+    reactive_bind_text(memory.stats.n_access,
                     p1 + 'hitratio',
-                    function(value)
-                    {
-                        var hit_ratio = 0.0;
-                        var n_hits    = get_var(memory.stats.n_hits) ;
-                        if (value != 0)
-                        {
-                            hit_ratio = (n_hits / value) ;
-                        }
-                        return hit_ratio.toFixed(2) ;
-                    }) ;
-    vue_appyBinding(memory.stats.n_access,
+                       function(value)
+                       {
+                           var hit_ratio = 0.0;
+                           var n_hits    = get_var(memory.stats.n_hits) ;
+                           if (value != 0)
+                           {
+                               hit_ratio = (n_hits / value) ;
+                           }
+                           return hit_ratio.toFixed(2) ;
+                       }) ;
+    reactive_bind_text(memory.stats.n_access,
                     p1 + 'missratio',
-                    function(value)
-                    {
-                        var miss_ratio = 0.0;
-                        var n_misses   = get_var(memory.stats.n_misses) ;
-                        if (value != 0)
-                        {
-                            miss_ratio = (n_misses / value) ;
-                        }
-                        return miss_ratio.toFixed(2) ;
-                    }) ;
+                       function(value)
+                       {
+                           var miss_ratio = 0.0;
+                           var n_misses   = get_var(memory.stats.n_misses) ;
+                           if (value != 0)
+                           {
+                               miss_ratio = (n_misses / value) ;
+                           }
+                           return miss_ratio.toFixed(2) ;
+                       }) ;
 
     /*
             * o1 += "  <li class='mb-2'>Last access: " +
-            *       "<span class='badge bg-secondary' id='cache_stats_last_r_w' >{{ value }}</span>" +
+            *       "<span class='badge bg-secondary' id='cache_stats_last_r_w' ></span>" +
             *       " address " +
-            *       "<span class='badge bg-secondary' id='cache_stats_last_addr'>{{ computed_value }}</span>" +
-            *       "<span                            id='cache_stats_lhm_1' >{{ computed_value }}</span>" + // " was a " +
-            *       "<span class='badge bg-secondary' id='cache_stats_lhm_2' >{{ computed_value }}</span>" + // <hit/miss>
+            *       "<span class='badge bg-secondary' id='cache_stats_last_addr'></span>" +
+            *       "<span                            id='cache_stats_lhm_1' ></span>" + // " was a " +
+            *       "<span class='badge bg-secondary' id='cache_stats_lhm_2' ></span>" + // <hit/miss>
             *       "  </li>\n" ;
             */
 
-    memory.stats.last_r_w = vue_observable_ifnotjetdone(memory.stats.last_r_w) ;
-    vue_appyBinding(memory.stats.last_r_w,
+    memory.stats.last_r_w = reactive_wrap(memory.stats.last_r_w) ;
+    reactive_bind_text(memory.stats.last_r_w,
                     p1 + 'last_r_w',
-                    function(value)
-                    {
-                        return value;
-                    }) ;
+                       function(value)
+                       {
+                           return value;
+                       }) ;
 
-    memory.stats.last_addr = vue_observable_ifnotjetdone(memory.stats.last_addr) ;
-    vue_appyBinding(memory.stats.last_addr,
+    memory.stats.last_addr = reactive_wrap(memory.stats.last_addr) ;
+    reactive_bind_text(memory.stats.last_addr,
                     p1 + 'last_addr',
-                    function(value)
-                    {
-                        return '0x' + value.toString(16);
-                    }) ;
+                       function(value)
+                       {
+                           return '0x' + value.toString(16);
+                       }) ;
 
-    memory.stats.last_h_m = vue_observable_ifnotjetdone(memory.stats.last_h_m) ;
-    vue_appyBinding(memory.stats.last_h_m,
+    memory.stats.last_h_m = reactive_wrap(memory.stats.last_h_m) ;
+    reactive_bind_text(memory.stats.last_h_m,
                     p1 + 'lhm_1',
-                    function(value)
-                    {
-                        if (value != '')
-                            return ' was a ' ;
-                        else return '' ;
-                    }) ;
-    vue_appyBinding(memory.stats.last_h_m,
+                       function(value)
+                       {
+                           if (value != '')
+                               return ' was a ' ;
+                           else return '' ;
+                       }) ;
+    reactive_bind_text(memory.stats.last_h_m,
                     p1 + 'lhm_2',
-                    function(value)
-                    {
-                        return value ;
-                    }) ;
+                       function(value)
+                       {
+                           return value ;
+                       }) ;
 
     /*
         *    // full-associative
             *   o1 += "<table class='table table-bordered table-hover table-sm w-auto'>" +
             *         "<thead><tr><th>tag</th><th>offset</th></tr></thead>" +
-            *         "<tbody><tr><td><span id='cache_stats_lp_tag'>{{ ...value }}</span></td>"+
-            *                    "<td><span id='cache_stats_lp_off'>{{ ...value }}</span></td></tr></tbody>" +
+            *         "<tbody><tr><td><span id='cache_stats_lp_tag'></span></td>"+
+            *                    "<td><span id='cache_stats_lp_off'></span></td></tr></tbody>" +
             *         "</table>" ;
         *   // direct-mapped
             *   o1 += "<table class='table table-bordered table-hover table-sm w-auto'>" +
             *         "<thead><tr><th>tag</th><th>index</th><th>offset</th></tr></thead>" +
-            *         "<tbody><tr><td><span id='cache_stats_lp_tag'>{{ ...value }}</span></td>"+
-            *                    "<td><span id='cache_stats_lp_set'>{{ ...value }}</span></td>"+
-            *                    "<td><span id='cache_stats_lp_off'>{{ ...value }}</span></td></tr></tbody>" +
+            *         "<tbody><tr><td><span id='cache_stats_lp_tag'></span></td>"+
+            *                    "<td><span id='cache_stats_lp_set'></span></td>"+
+            *                    "<td><span id='cache_stats_lp_off'></span></td></tr></tbody>" +
             *         "</table>" ;
         *   // set associative
             *   o1 += "<table class='table table-bordered table-hover table-sm w-auto'>" +
             *         "<thead><tr><th>tag</th><th>set</th><th>offset</th></tr></thead>" +
-            *         "<tbody><tr><td><span id='cache_stats_lp_tag'>{{ ...value }}</span></td>"+
-            *                    "<td><span id='cache_stats_lp_set'>{{ ...value }}</span></td>"+
-            *                    "<td><span id='cache_stats_lp_off'>{{ ...value }}</span></td></tr></tbody>" +
+            *         "<tbody><tr><td><span id='cache_stats_lp_tag'></span></td>"+
+            *                    "<td><span id='cache_stats_lp_set'></span></td>"+
+            *                    "<td><span id='cache_stats_lp_off'></span></td></tr></tbody>" +
             *         "</table>" ;
             */
 
-    memory.stats.last_parts.tag = vue_observable_ifnotjetdone(memory.stats.last_parts.tag) ;
-    vue_appyBinding(memory.stats.last_parts.tag,
+    memory.stats.last_parts.tag = reactive_wrap(memory.stats.last_parts.tag) ;
+    reactive_bind_text(memory.stats.last_parts.tag,
                     p1 + 'lp_tag',
-                    function(value)
-                    {
-                        var tag_size = get_var(memory.cfg.tag_size) ;
-                        return parseInt(value).toString(2).padStart(tag_size, '0') ;
-                    }) ;
+                       function(value)
+                       {
+                           var tag_size = get_var(memory.cfg.tag_size) ;
+                           return parseInt(value).toString(2).padStart(tag_size, '0') ;
+                       }) ;
 
-    memory.stats.last_parts.set = vue_observable_ifnotjetdone(memory.stats.last_parts.set) ;
-    vue_appyBinding(memory.stats.last_parts.set,
+    memory.stats.last_parts.set = reactive_wrap(memory.stats.last_parts.set) ;
+    reactive_bind_text(memory.stats.last_parts.set,
                     p1 + 'lp_set',
-                    function(value)
-                    {
-                        var set_size = get_var(memory.cfg.set_size) ;
-                        return parseInt(value).toString(2).padStart(set_size, '0') ;
-                    }) ;
+                       function(value)
+                       {
+                           var set_size = get_var(memory.cfg.set_size) ;
+                           return parseInt(value).toString(2).padStart(set_size, '0') ;
+                       }) ;
 
-    memory.stats.last_parts.offset = vue_observable_ifnotjetdone(memory.stats.last_parts.offset) ;
-    vue_appyBinding(memory.stats.last_parts.offset,
+    memory.stats.last_parts.offset = reactive_wrap(memory.stats.last_parts.offset) ;
+    reactive_bind_text(memory.stats.last_parts.offset,
                     p1 + 'lp_off',
-                    function(value)
-                    {
-                        var off_size = get_var(memory.cfg.off_size) ;
-                        return parseInt(value).toString(2).padStart(off_size, '0') ;
-                    }) ;
+                       function(value)
+                       {
+                           var off_size = get_var(memory.cfg.off_size) ;
+                           return parseInt(value).toString(2).padStart(off_size, '0') ;
+                       }) ;
 
     return true ;
 }
@@ -540,10 +538,9 @@ export function wepsim_show_cache_memory(cache_memory)
     var o1 = wepsim_show_cache_memory_skel(cache_memory) ;
     $('#memory_CACHE').html(o1) ;
 
-    // vue binding
     for (var i = 0; i < cache_memory.length; i++)
     {
-        wepsim_show_cache_vueinit(i + 1, cache_memory[i]) ;
+        wepsim_show_cache_init(i + 1, cache_memory[i]) ;
     }
 }
 

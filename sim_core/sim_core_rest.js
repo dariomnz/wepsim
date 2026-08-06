@@ -18,9 +18,8 @@
  *
  */
 
-import { get_var } from './sim_core_values.js';
+import { get_var, is_reactive } from './sim_core_values.js';
 import $ from 'jquery';
-import Vuex from 'vuex';
 
 /*
          *  API REST: public API
@@ -69,7 +68,7 @@ export function simcore_rest_call (name, method, uri, data)
 
     // check endpoint
     var api_endpoint = rest_info.endpoint ;
-    if (api_endpoint instanceof Vuex.Store ||
+    if (is_reactive(api_endpoint) ||
         (api_endpoint && typeof api_endpoint === 'object' && 'value' in api_endpoint))
     {
         api_endpoint = get_var(api_endpoint) ;

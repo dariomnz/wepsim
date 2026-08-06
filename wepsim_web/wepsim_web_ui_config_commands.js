@@ -43,7 +43,6 @@ import { WORD_BYTES } from '../sim_sw/assembly/datatypes.js';
 import { main_memory_getsrc, main_memory_getsrcbin } from '../sim_core/sim_adt_mainmemory.js';
 import { simhw_active } from '../sim_hw/sim_hw_index.js';
 import { simhwelto_describe_component, simhwelto_prepare_hash } from '../sim_hw/sim_hw_eltos.js';
-import { value_toString } from '../sim_core/sim_core_values.js';
 import { wepsim_popovers_hide, wepsim_popovers_init, wepsim_popover_init } from './wepsim_web_ui_popover.js';
 import { popover_cfg_make } from './wepsim_uielto_registers.js';
 import { wepsim_update_signal_dialog } from '../wepsim_core/wepsim_signal.js';

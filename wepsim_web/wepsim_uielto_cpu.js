@@ -19,9 +19,8 @@
  */
 import $ from 'jquery';
 import { ws_uielto } from './wepsim_uielto.js';
-import { get_value } from '../sim_core/sim_core_values.js';
+import { get_value, reactive_wrap, reactive_bind_text } from '../sim_core/sim_core_values.js';
 import { simhw_active, simhw_sim_state } from '../sim_hw/sim_hw_index.js';
-import { vue_rebind_state } from '../sim_core/sim_core_values.js';
 
 /*
          *  CPU device
@@ -71,15 +70,18 @@ export class ws_cpu extends ws_uielto
         else o1 += this.render_populate_as_table() ;
         $(div_hash).html(o1) ;
 
-        // vue binding
+        // bind reactive state to DOM elements
         var ref_obj = simhw_sim_state('CLK') ;
-        vue_rebind_state(ref_obj, '#clk_context') ;
+        var store   = reactive_wrap(ref_obj) ;
+        reactive_bind_text(store, '#clk_context') ;
 
         ref_obj = simhw_sim_state('DECO_INS') ;
-        vue_rebind_state(ref_obj, '#ins_context') ;
+        store   = reactive_wrap(ref_obj) ;
+        reactive_bind_text(store, '#ins_context') ;
 
         ref_obj = simhw_sim_state('CLK') ;
-        vue_rebind_state(ref_obj, '#cpi_context', function(v)
+        store   = reactive_wrap(ref_obj) ;
+        reactive_bind_text(store, '#cpi_context', function(v)
         {
             var i = get_value(simhw_sim_state('DECO_INS'));
             if (i > 0) return (v / i).toFixed(2);
@@ -87,7 +89,8 @@ export class ws_cpu extends ws_uielto
         }) ;
 
         ref_obj = simhw_sim_state('ACC_TIME') ;
-        vue_rebind_state(ref_obj, '#tms_context') ;
+        store   = reactive_wrap(ref_obj) ;
+        reactive_bind_text(store, '#tms_context') ;
     }
 
     render_populate_as_table ()
@@ -99,25 +102,25 @@ export class ws_cpu extends ws_uielto
             ' <tr>' +
             "<td align='center' class='w-50'>Instructions</td>" +
             "<td align='center' class='w-50'>" +
-            "<div id='ins_context'>{{ value }}</div>" +
+            "<div id='ins_context'></div>" +
             '</td>' +
             ' </tr>' +
             ' <tr>' +
             "<td align='center' class='w-50'>CLK ticks</td>" +
             "<td align='center' class='w-50'>" +
-            "<div id='clk_context'>{{ value }}</div>" +
+            "<div id='clk_context'></div>" +
             '</td>' +
             ' </tr>' +
             ' <tr>' +
             "<td align='center' class='w-50'>CPI</td>" +
             "<td align='center' class='w-50'>" +
-            "<div id='cpi_context'>{{ computed_value }}</div>" +
+            "<div id='cpi_context'></div>" +
             '</td>' +
             ' </tr>' +
             ' <tr>' +
             "<td align='center' class='w-50'>Accumulated msec.</td>" +
             "<td align='center' class='w-50'>" +
-            "<div id='tms_context'>{{ value }}</div>" +
+            "<div id='tms_context'></div>" +
             '</td>' +
             '</table>' +
             '</div>' +
@@ -135,7 +138,7 @@ export class ws_cpu extends ws_uielto
             "<span data-langkey='Instructions'>Instructions</span><br>" +
             ' </h5>' +
             " <div class='card-body  text-center p-2'>" +
-            " <p class='card-text'><div id='ins_context'>{{ value }}</div></p>" +
+            " <p class='card-text'><div id='ins_context'></div></p>" +
             ' </div>' +
             '</div>' +
             '</div>' +
@@ -146,7 +149,7 @@ export class ws_cpu extends ws_uielto
             "<span data-langkey='CLK ticks'>CLK ticks</span><br>" +
             ' </h5>' +
             " <div class='card-body  text-center p-2'>" +
-            " <p class='card-text'><div id='clk_context'>{{ value }}</div></p>" +
+            " <p class='card-text'><div id='clk_context'></div></p>" +
             ' </div>' +
             '</div>' +
             '</div>' +
@@ -157,7 +160,7 @@ export class ws_cpu extends ws_uielto
             "<span data-langkey='CPI'>CPI</span><br>" +
             ' </h5>' +
             " <div class='card-body  text-center p-2'>" +
-            " <p class='card-text'><div id='cpi_context'>{{ computed_value }}</div></p>" +
+            " <p class='card-text'><div id='cpi_context'></div></p>" +
             ' </div>' +
             '</div>' +
             '</div>' +
@@ -168,7 +171,7 @@ export class ws_cpu extends ws_uielto
             "<span data-langkey='Accumulated msec.'>Accumulated msec.</span><br>" +
             ' </h5>' +
             " <div class='card-body  text-center p-2'>" +
-            " <p class='card-text'><div id='tms_context' class='text-truncate'>{{ value }}</div></p>" +
+            " <p class='card-text'><div id='tms_context' class='text-truncate'></div></p>" +
             ' </div>' +
             '</div>' +
             '</div>' +

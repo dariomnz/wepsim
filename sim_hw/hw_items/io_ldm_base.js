@@ -382,7 +382,6 @@ export function io_ldm_base_register (sim_p)
             sim_p.internal_states.ledm_colors = colors_clone('') ;
             for (var i = 0; i < sim_p.internal_states.ledm_state.length; i++)
             {
-                set_var(sim_p.internal_states.ledm_state[i].color, 1);
                 set_var(sim_p.internal_states.ledm_state[i].color, 0);
             }
 

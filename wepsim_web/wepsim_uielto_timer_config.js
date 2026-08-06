@@ -20,7 +20,7 @@
 import $ from 'jquery';
 import { ws_uielto } from './wepsim_uielto.js';
 import { simhw_active, simhw_internalState } from '../sim_hw/sim_hw_index.js';
-import { vue_appyBinding, vue_observable_ifnotjetdone } from '../sim_core/sim_core_values.js';
+import { reactive_wrap, reactive_bind_input } from '../sim_core/sim_core_values.js';
 
 /*
          *  I/O device (config)
@@ -113,14 +113,14 @@ export class ws_io_config extends ws_uielto
                 '</td>' +
                 "<td align='center' class='p-0'>" +
                 "<div id='int" + i + "_per' class='m-0'>" +
-                "<input type='number' v-model.lazy='value' " +
+                "<input type='number' " +
                 "       name='input_io_per_" + i + "' " +
                 "       min='0' max='99999999' class='form-control p-0 m-0'>" +
                 '</div>' +
                 '</td>' +
                 "<td align='center' class='p-0'>" +
                 "<div id='int" + i + "_pro' class='m-0'>" +
-                "<input type='number' v-model.lazy='value' " +
+                "<input type='number' " +
                 "       name='input_io_pro_" + i + "' " +
                 "       min='0' max='1' step='.05' class='form-control p-0 m-0'>" +
                 '</div>' +
@@ -136,26 +136,18 @@ export class ws_io_config extends ws_uielto
 
         $(div_hash).html(o1) ;
 
-        // vue binding
+        // bind reactive state to DOM elements
         for (i = 0; i < curr_iointfactory.length; i++)
         {
             // period
-            curr_iointfactory[i].period = vue_observable_ifnotjetdone(curr_iointfactory[i].period) ;
-            vue_appyBinding(curr_iointfactory[i].period,
-                            '#int' + i + '_per',
-                            function(value)
-                            {
-                                return value;
-                            }) ;
+            curr_iointfactory[i].period = reactive_wrap(curr_iointfactory[i].period) ;
+            reactive_bind_input(curr_iointfactory[i].period,
+                            '#int' + i + '_per') ;
 
             // probability
-            curr_iointfactory[i].probability = vue_observable_ifnotjetdone(curr_iointfactory[i].probability) ;
-            vue_appyBinding(curr_iointfactory[i].probability,
-                            '#int' + i + '_pro',
-                            function(value)
-                            {
-                                return value;
-                            }) ;
+            curr_iointfactory[i].probability = reactive_wrap(curr_iointfactory[i].probability) ;
+            reactive_bind_input(curr_iointfactory[i].probability,
+                            '#int' + i + '_pro') ;
         }
     }
 }

@@ -107,7 +107,6 @@ export const vite_config_ts:UserConfig = {
     base:    '/wepsim/',
     resolve: {
         alias: {
-            'vue':         'vue/dist/vue.esm.js',
             'jquery-knob': path.resolve(__dirname, 'node_modules/jquery-knob/js/jquery.knob.js'),
         },
     },
@@ -119,7 +118,7 @@ export const vite_config_ts:UserConfig = {
             typescript: true,
         }),
         eslint({
-            include:     ['src/**/*.js', 'src/**/*.vue', 'sim_core/**/*.js', 'sim_hw/**/*.js', 'sim_hw/**/*.ts', 'sim_sw/**/*.js', 'wepsim_core/**/*.js', 'wepsim_web/**/*.js', 'wepsim_i18n/**/*.js'],
+            include:     ['src/**/*.js', 'sim_core/**/*.js', 'sim_hw/**/*.js', 'sim_hw/**/*.ts', 'sim_sw/**/*.js', 'wepsim_core/**/*.js', 'wepsim_web/**/*.js', 'wepsim_i18n/**/*.js'],
             exclude:     ['node_modules/**', 'ws_dist/**', 'external/**', 'repo/**', 'devel/**'],
             emitWarning: true,
             emitError:   true,
@@ -206,12 +205,6 @@ export const vite_config_ts:UserConfig = {
                         {
                             name:                           'vendor-bootstrap',
                             test:                           /\/bootstrap\//,
-                            includeDependenciesRecursively: true,
-                            priority:                       20,
-                        },
-                        {
-                            name:                           'vendor-vue',
-                            test:                           /\/vue\/|\/vuex\//,
                             includeDependenciesRecursively: true,
                             priority:                       20,
                         },

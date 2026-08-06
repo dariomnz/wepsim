@@ -20,7 +20,7 @@
 import $ from 'jquery';
 import { ws_uielto } from './wepsim_uielto.js';
 import { simhw_active, simhw_internalState } from '../sim_hw/sim_hw_index.js';
-import { vue_appyBinding, vue_observable_ifnotjetdone } from '../sim_core/sim_core_values.js';
+import { reactive_wrap, reactive_bind_text, reactive_bind_class } from '../sim_core/sim_core_values.js';
 
 /*
          *  I/O device (information)
@@ -100,9 +100,9 @@ export class ws_io_info extends ws_uielto
         {
             o1 += '<tr>' +
                 "<td id='int" + i + "_act' align=center width=50%>" +
-                "<span v-bind:class='[ value ? \"fw-bold\" : \"\" ]'>" + i + '</span>' +
+                '<span>' + i + '</span>' +
                 '</td>' +
-                "<td id='int" + i + "_acc' align=center width=50%>" + '<span>{{ value }}</span>' +
+                "<td id='int" + i + "_acc' align=center width=50%>" + '<span></span>' +
                 '</td>' +
                 '</tr>' ;
         }
@@ -114,24 +114,20 @@ export class ws_io_info extends ws_uielto
 
         $(div_hash).html(o1) ;
 
-        // vue binding
+        // bind reactive state to DOM elements
         for (i = 0; i < curr_iointfactory.length; i++)
         {
-            curr_iointfactory[i].accumulated = vue_observable_ifnotjetdone(curr_iointfactory[i].accumulated) ;
-            vue_appyBinding(curr_iointfactory[i].accumulated,
-                            '#int' + i + '_acc',
-                            function(value)
-                            {
-                                return value;
-                            }) ;
+            curr_iointfactory[i].accumulated = reactive_wrap(curr_iointfactory[i].accumulated) ;
+            reactive_bind_text(curr_iointfactory[i].accumulated,
+                            '#int' + i + '_acc span') ;
 
-            curr_iointfactory[i].active = vue_observable_ifnotjetdone(curr_iointfactory[i].active) ;
-            vue_appyBinding(curr_iointfactory[i].active,
-                            '#int' + i + '_act',
-                            function(value)
-                            {
-                                return value;
-                            }) ;
+            curr_iointfactory[i].active = reactive_wrap(curr_iointfactory[i].active) ;
+            reactive_bind_class(curr_iointfactory[i].active,
+                            '#int' + i + '_act span',
+                                function (value)
+                                {
+                                    return value ? 'fw-bold' : '' ;
+                                }) ;
         }
     }
 }

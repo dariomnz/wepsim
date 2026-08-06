@@ -59,7 +59,6 @@
     "jquery": "^3.7.1",
     "jquery-knob": "^1.2.11",
     "jshint": "^0.5.9",
-    "knockout": "^3.5.3",
     "lz-string": "^1.5.0",
     "mime-types": "^2.1.35",
     "nodemon": "^3.1.14",
@@ -79,8 +78,6 @@
     "vite-multiple-assets": "^2.2.6",
     "vite-plugin-checker": "^0.14.4",
     "vite-plugin-eslint": "^1.8.1",
-    "vue": "^2.7.16",
-    "vuex": "^3.6.2",
     "winston": "^2.4.7",
     "yargs": "^15.4.1"
   },

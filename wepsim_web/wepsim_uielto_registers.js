@@ -25,7 +25,7 @@ import { get_simware } from '../sim_core/sim_adt_core.js';
 import { get_cfg } from '../sim_core/sim_cfg.js';
 import { get_value, set_value, update_value } from '../sim_core/sim_core_values.js';
 import { value2string, hex2char8, hex2bin, hex2float, simcoreui_pack } from '../sim_core/sim_core_ui.js';
-import { vue_observable_ifnotjetdone, vue_appyBinding } from '../sim_core/sim_core_values.js';
+import { reactive_wrap, reactive_bind_text } from '../sim_core/sim_core_values.js';
 import { i18n_get_TagFor } from '../wepsim_i18n/i18n.js';
 import { quickcfg_html_btn, quickcfg_html_btnreg, quickcfg_html_onoff, quickcfg_html_header, quickcfg_html_br, quickcfg_html_close, wepsim_quickcfg_init } from './wepsim_web_ui_quickcfg.js';
 import { wepsim_popovers_init } from './wepsim_web_ui_popover.js';
@@ -386,7 +386,6 @@ export function wepsim_show_rf_names()
          *  init_x
          */
 
-// helper for vue binding
 export var last_rf_id = { value: null } ;
 
 export function init_update_last_id(old_id, elto_id)
@@ -446,7 +445,7 @@ export function wepsim_init_rf()
             "        id='rf" + index + "'>" +
             "<span   id='name_RF" + index + "' class='p-0 font-monospace' style='float:center;'>" + o1_rn + '</span>&nbsp;' +
             "<span class='" + separator_class + "'></span>" +
-            "<span class='badge badge-secondary bg-info-subtle text-body' style='' id='rf_" + index + "'>{{ computed_value }}</span>" +
+            "<span class='badge badge-secondary bg-info-subtle text-body' style='' id='rf_" + index + "'></span>" +
             '</button>' ;
     }
 
@@ -503,7 +502,6 @@ export function wepsim_init_rf()
     } ;
     wepsim_popovers_init('[data-bs-toggle=popover-up]', popover_cfg, null) ;
 
-    // vue binding
     var f_computed_value_rf = function(value, elto_id)
     {
         // update ui
@@ -518,8 +516,7 @@ export function wepsim_init_rf()
     {
         var ref_obj = simhw_sim_states().BR[index] ;
 
-        ref_obj.value = vue_observable_ifnotjetdone(ref_obj) ;
-        vue_appyBinding(ref_obj.value, '#rf_' + index, f_computed_value_rf) ;
+        reactive_bind_text(reactive_wrap(ref_obj), '#rf_' + index, f_computed_value_rf) ;
     }
 }
 
@@ -562,7 +559,7 @@ export function render_state_button(ename, vir_real, separator_class, btn_id_pre
         "        id='" + btn_id_prefix + disp_ename + "'>" +
         showkey +
         spanbetw +
-        " <span class='badge badge-secondary bg-info-subtle text-body' style='' id='" + val_id_prefix + disp_ename + "'>{{ computed_value }}</span>" +
+        " <span class='badge badge-secondary bg-info-subtle text-body' style='' id='" + val_id_prefix + disp_ename + "'></span>" +
         '</button>';
 }
 
@@ -605,13 +602,12 @@ export function popover_cfg_make(btn_prefix)
     };
     return o;
 }
-export function bind_state_vue(entry, val_prefix, f_computed)
+export function bind_state_reactive(entry, val_prefix, f_computed)
 {
-    var s         = entry.split(',')[0];
-    var ref_obj   = simhw_sim_state_getref(s);
-    ref_obj.value = vue_observable_ifnotjetdone(ref_obj);
-    s             = s.replace('.', '_');
-    vue_appyBinding(ref_obj.value, '#' + val_prefix + s, f_computed);
+    var s       = entry.split(',')[0];
+    var ref_obj = simhw_sim_state_getref(s);
+    s           = s.replace('.', '_');
+    reactive_bind_text(reactive_wrap(ref_obj), '#' + val_prefix + s, f_computed);
 }
 
 export function wepsim_init_states()
@@ -653,7 +649,7 @@ export function wepsim_init_states()
 
     for (var i = 0; i < filter.length; i++)
     {
-        bind_state_vue(filter[i], 'rf_', f_computed_value);
+        bind_state_reactive(filter[i], 'rf_', f_computed_value);
     }
 
     // filter_states_groups (below register file)
@@ -688,7 +684,7 @@ export function wepsim_init_states()
     {
         group = filter_groups[group_name];
         for (j = 0; j < group.length; j++)
-            bind_state_vue(group[j], 'rfg_', f_computed_value);
+            bind_state_reactive(group[j], 'rfg_', f_computed_value);
     }
 }
 

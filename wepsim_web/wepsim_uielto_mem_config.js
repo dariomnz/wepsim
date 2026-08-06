@@ -20,7 +20,7 @@
 import $ from 'jquery';
 import { ws_uielto } from './wepsim_uielto.js';
 import { get_value } from '../sim_core/sim_core_values.js';
-import { vue_observable, vue_appyBinding } from '../sim_core/sim_core_values.js';
+import { reactive_wrap, reactive_bind_input } from '../sim_core/sim_core_values.js';
 import { simhw_active, simhw_internalState_get, simhw_internalState_reset } from '../sim_hw/sim_hw_index.js';
 
 /*
@@ -73,26 +73,18 @@ export class ws_mem_config extends ws_uielto
 
         $(div_hash).html(o1) ;
 
-        // vue binding
+        // bind reactive state to DOM elements
         var base_mp_wc_read = get_value(simhw_internalState_get('MP_wc', 'read')) ;
-        var curr_mp_read_wc = { value: vue_observable(base_mp_wc_read) } ;
+        var curr_mp_read_wc = { value: base_mp_wc_read } ;
         simhw_internalState_reset('MP_wc.read', curr_mp_read_wc) ;
-        vue_appyBinding(curr_mp_read_wc.value,
-                        '#mp_wc_read_' + input_div,
-                        function(value)
-                        {
-                            return value;
-                        }) ;
+        reactive_bind_input(reactive_wrap(curr_mp_read_wc),
+                        '#mp_wc_read_' + input_div + ' input') ;
 
         var base_mp_wc_write = get_value(simhw_internalState_get('MP_wc', 'write')) ;
-        var curr_mp_write_wc = { value: vue_observable(base_mp_wc_write) } ;
+        var curr_mp_write_wc = { value: base_mp_wc_write } ;
         simhw_internalState_reset('MP_wc.write', curr_mp_write_wc) ;
-        vue_appyBinding(curr_mp_write_wc.value,
-                        '#mp_wc_write_' + input_div,
-                        function(value)
-                        {
-                            return value;
-                        }) ;
+        reactive_bind_input(reactive_wrap(curr_mp_write_wc),
+                        '#mp_wc_write_' + input_div + ' input') ;
     }
 
     render_populate_as_table (input_div)
@@ -106,7 +98,7 @@ export class ws_mem_config extends ws_uielto
             "<tr><td align=center'>Read wait cycles (<u>0</u> - &infin;)</td>" +
             "    <td align=center'>" +
             "<div id='mp_wc_read_" + input_div + "'>" +
-            "<input type=number v-model.lazy='value' " +
+            '<input type=number ' +
             "       name='input_mem_read_wait' " +
             "       min='0' max='99999999'>" +
             '</div>' +
@@ -115,7 +107,7 @@ export class ws_mem_config extends ws_uielto
             "<tr><td align=center'>Write wait cycles (<u>0</u> - &infin;)</td>" +
             "    <td align=center'>" +
             "<div id='mp_wc_write_" + input_div + "'>" +
-            "<input type=number v-model.lazy='value' " +
+            '<input type=number ' +
             "       name='input_mem_write_wait' " +
             "       min='0' max='99999999'>" +
             '</div>' +
@@ -140,7 +132,7 @@ export class ws_mem_config extends ws_uielto
             " <div class='card-body'>" +
             " <p class='card-text'>" +
             "<div id='" + input_div + "'>" +
-            "<input type=number v-model.lazy='value' min='0' max='99999999'>" +
+            "<input type=number min='0' max='99999999'>" +
             ' </div>' +
             ' </p>' +
             ' </div>' +

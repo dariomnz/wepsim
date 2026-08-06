@@ -21,7 +21,7 @@
 /* jshint esversion: 8 */
 
 // Web Components
-globalThis.HTMLElement = class HTMLElement
+globalThis.HTMLElement    = class HTMLElement
 {};
 globalThis.customElements = { define:      function()
 {}, get:         function()
@@ -29,7 +29,7 @@ globalThis.customElements = { define:      function()
 {
     return Promise.resolve();
 } };
-globalThis.document = {
+globalThis.document       = {
     getElementById: function()
     {
         return null;
@@ -70,14 +70,4 @@ globalThis.document = {
     {},
     documentElement: { style: {} },
 };
-globalThis.window = globalThis;
-
-// Vue + Vuex
-globalThis.Vue = class Vue
-{};
-
-globalThis.Vuex = class Vuex
-{};
-
-globalThis.Vuex.Store = class
-{} ;
+globalThis.window         = globalThis;

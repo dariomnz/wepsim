@@ -20,7 +20,6 @@
 import $ from 'jquery';
 import { ws_uielto, register_uielto } from './wepsim_uielto.js';
 import { onClick } from './wepsim_web_actions.js';
-import Vue from 'vue';
 import { wepsim_example_getSet, wepsim_example_reset, wepsim_example_load } from '../wepsim_core/wepsim_example.js';
 import { wepsim_notify_success } from '../wepsim_core/wepsim_notify.js';
 
@@ -80,16 +79,17 @@ export class ws_list_example extends ws_uielto
             return ;
         }
 
-        // build HTML code
-        o1 += '<div class="btn-group-vertical w-100" role="group" aria-label="Examples">' +
-            '<button type="button" ' +
-            '        v-for="ex in examples" ' +
-            '        v-bind:data-name="ex.name" ' +
-            '        class="text-danger btn border-secondary m-1 btn-block" ' +
-            '        data-bind="click" data-action="example-load">' +
-            '<span :data-langkey="ex.name">{{ ex.name }}</span>' +
-            '</button>' +
-            '</div>' ;
+        o1 += '<div class="btn-group-vertical w-100" role="group" aria-label="Examples">' ;
+        for (var i = 0; i < e_exs.length; i++)
+        {
+            o1 += '<button type="button" ' +
+                '        data-name="' + e_exs[i].name + '" ' +
+                '        class="text-danger btn border-secondary m-1 btn-block" ' +
+                '        data-bind="click" data-action="example-load">' +
+                '<span data-langkey="' + e_exs[i].name + '">' + e_exs[i].name + '</span>' +
+                '</button>' ;
+        }
+        o1 += '</div>' ;
 
         $('#list_examples_' + this.name_str).html(o1) ;
         onClick('example-load', async (el) =>
@@ -97,11 +97,6 @@ export class ws_list_example extends ws_uielto
             wepsim_example_reset();
             await wepsim_example_load(el.getAttribute('data-name'));
             wepsim_notify_success('<strong>INFO</strong>', 'Examples list loaded!.');
-        }) ;
-
-        this.vueobj = new Vue({
-            el:   '#list_examples_' + this.name_str,
-            data: { examples: e_exs },
         }) ;
     }
 }

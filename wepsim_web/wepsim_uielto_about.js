@@ -18,7 +18,6 @@
  *
  */
 import $ from 'jquery';
-import Vue from 'vue';
 import { ws_uielto, register_uielto } from './wepsim_uielto.js';
 import { onClick } from './wepsim_web_actions.js';
 import { ws_info } from '../sim_core/sim_adt_core.js';
@@ -103,39 +102,51 @@ export class ws_about extends ws_uielto
             return ;
         }
 
-        // html holder
-        var o1 = '<div id="team_' + this.name_str + '" ' +
-            '     class="card-desk row mx-auto">' +
-            '<div v-for="member in team" class="card bg-tertiary text-center col p-0">' +
-            '  <img class="card-img-top img-fluid shadow no-dark-mode" ' +
-            '       v-bind:id="member.c_id"' +
-            '       v-bind:src="member.i_src" v-bind:alt="member.i_alt" />' +
-            '  <div class="card-body pt-2 pb-1 px-0">' +
-            '       <a class="btn p-0 text-primary d-md-none text-vertical-lr "' +
-            '          v-bind:id="member.a_id">{{ member.i_alt }}</a>' +
-            '       <a class="btn p-0 text-primary d-none d-md-block"' +
-            '          v-bind:id="member.a_id">{{ member.i_alt }}</a>' +
-            '  </div>' +
-            '  <div class="card-footer p-0 collapse collapse7 show bg-secundary text-start">' +
-            '      <div class="list-group list-group-flush">' +
-            '<component v-for="social in member.socials" ' +
-            '           :is="social.href?\'a\':\'span\'" v-bind:href="social.href || \'\'" ' +
-            '           target="_blank" ' +
-            '           class="list-group-item p-2 mx-auto w-100">' +
-            '<em   v-bind:class="social.faclass"></em>' +
-            '<span class="m-1 d-none d-sm-inline">{{ social.name }}</span>' +
-            '</component>' +
-            '    </div>' +
-            '  </div>' +
-            '</div>' +
-            '</div>' ;
+        // build HTML with for-loop
+        var team = ws_info.wepsim_team ;
+        var o1   = '<div id="team_' + this.name_str + '" ' +
+            '     class="card-desk row mx-auto">' ;
+
+        for (var m = 0; m < team.length; m++)
+        {
+            var member = team[m] ;
+            o1        += '<div class="card bg-tertiary text-center col p-0">' +
+                '  <img class="card-img-top img-fluid shadow no-dark-mode" ' +
+                '       id="' + member.c_id + '"' +
+                '       src="' + member.i_src + '" alt="' + member.i_alt + '" />' +
+                '  <div class="card-body pt-2 pb-1 px-0">' +
+                '       <a class="btn p-0 text-primary d-md-none text-vertical-lr "' +
+                '          id="' + member.a_id + '">' + member.i_alt + '</a>' +
+                '       <a class="btn p-0 text-primary d-none d-md-block"' +
+                '          id="' + member.a_id + '">' + member.i_alt + '</a>' +
+                '  </div>' +
+                '  <div class="card-footer p-0 collapse collapse7 show bg-secundary text-start">' +
+                '      <div class="list-group list-group-flush">' ;
+
+            if (member.socials)
+            {
+                for (var s in member.socials)
+                {
+                    var social = member.socials[s] ;
+                    var tag    = social.href ? 'a' : 'span' ;
+                    var href   = social.href ? ' href="' + social.href + '"' : '' ;
+                    o1        += '<' + tag + href +
+                        '           target="_blank" ' +
+                        '           class="list-group-item p-2 mx-auto w-100">' +
+                        '<em   class="' + (social.faclass || '') + '"></em>' +
+                        '<span class="m-1 d-none d-sm-inline">' + (social.name || '') + '</span>' +
+                        '</' + tag + '>' ;
+                }
+            }
+
+            o1 += '    </div>' +
+                '  </div>' +
+                '</div>' ;
+        }
+
+        o1 += '</div>' ;
 
         $('#about_' + this.name_str).html(o1) ;
-
-        this.vueobj = new Vue({
-            el:   '#team_' + this.name_str,
-            data: { team: ws_info.wepsim_team },
-        }) ;
     }
 }
 

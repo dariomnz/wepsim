@@ -21,8 +21,8 @@ import $ from 'jquery';
 import { ws_uielto } from './wepsim_uielto.js';
 import { compute_general_behavior } from '../sim_hw/sim_hw_behavior.js';
 import { simcore_rest_add } from '../sim_core/sim_core_rest.js';
-import { simhw_active, simhw_internalState, simhw_internalState_set } from '../sim_hw/sim_hw_index.js';
-import { vue_appyBinding, vue_observable_ifnotjetdone } from '../sim_core/sim_core_values.js';
+import { simhw_active, simhw_internalState, simhw_internalState_reset } from '../sim_hw/sim_hw_index.js';
+import { reactive_wrap, reactive_bind_input } from '../sim_core/sim_core_values.js';
 
 /*
          *  LEDM device
@@ -104,7 +104,7 @@ export class ws_ledm extends ws_uielto
             "       class='table table-hover table-sm table-bordered m-0 collapse'>" +
             '<tr><td>' +
             "<label class='my-0 text-wrap' for='ledm_apirest_endpoint'>REST URL (e.g.: http://localhost:5000/matrix)</label>" +
-            "<input id='ledm_apirest_endpoint' type='text' v-model.lazy='value' class='form-control text-info p-0'>" +
+            "<input id='ledm_apirest_endpoint' type='text' class='form-control text-info p-0'>" +
             '</td></tr>' +
             '</table>' +
             '' +
@@ -119,9 +119,8 @@ export class ws_ledm extends ws_uielto
             {
                 o1 += "<td align='center' class='m-0' " +
                     "    id='ledm" + (j * ledm_dim + k) + "_context' " +
-                    "    v-bind:style='{ \"background-color\": webui_ledm_value2color(value), height: \"15px\", width: \"15px\"}' " +
-                    "    v-on:click='value = (value + 1) % 256'>" +
-                    "<span class='visually-hidden'>background-color {{value}}</span>" +
+                    "    style='height:15px; width:15px;'>" +
+                    "<span class='visually-hidden'>background-color</span>" +
                     '</td>' ;
             }
             o1 += '</tr>' ;
@@ -134,21 +133,37 @@ export class ws_ledm extends ws_uielto
 
         $(div_hash).html(o1) ;
 
-        // vue binding
-        var f_computed_value = function(value)
-        {
-            webui_ledm_set() ;
-            return value ;
-        } ;
-
+        // bind reactive state to DOM elements
         for (i = 0; i < ledm_states.length; i++)
         {
-            ledm_states[i].color = vue_observable_ifnotjetdone(ledm_states[i].color) ;
-            vue_appyBinding(ledm_states[i].color, '#ledm' + i + '_context', f_computed_value, { webui_ledm_value2color: webui_ledm_value2color }) ;
-        }
+            ledm_states[i].color = reactive_wrap(ledm_states[i].color) ;
 
-        ledm_apirest_endpoint = vue_observable_ifnotjetdone(ledm_apirest_endpoint) ;
-        vue_appyBinding(ledm_apirest_endpoint, '#ledm_apirest_endpoint', f_computed_value) ;
+            (function (idx)
+            {
+                var td    = document.getElementById('ledm' + idx + '_context') ;
+                var span  = td ? td.querySelector('.visually-hidden') : null ;
+                var store = ledm_states[idx].color ;
+
+                var update = function ()
+                {
+                    if (td) td.style.backgroundColor = webui_ledm_value2color(store.value) ;
+                    if (span) span.textContent = 'background-color ' + store.value ;
+                    webui_ledm_set() ;
+                } ;
+                store.subscribe(update, 'ledm' + idx + '_context') ;
+                if (td) td.style.backgroundColor = webui_ledm_value2color(store.value) ;
+                if (span) span.textContent = 'background-color ' + store.value ;
+
+                if (td) td.addEventListener('click', function ()
+                {
+                    store.value = (store.value + 1) % 256 ;
+                }) ;
+            })(i) ;
+        }
+        webui_ledm_set() ;
+
+        ledm_apirest_endpoint = reactive_wrap(ledm_apirest_endpoint) ;
+        reactive_bind_input(ledm_apirest_endpoint, '#ledm_apirest_endpoint') ;
     }
 }
 
@@ -161,7 +176,7 @@ export function webui_ledm_set()
         return false ;
     }
 
-    simhw_internalState_set('ledm_sync', false) ;
+    simhw_internalState_reset('ledm_sync', false) ;
     compute_general_behavior('LEDM_SYNC') ;
     return true ;
 }

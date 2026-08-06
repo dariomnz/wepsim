@@ -115,7 +115,7 @@ var $ = function(sel)
     return makeJqObj();
 };
 
-$.ajax = function()
+$.ajax     = function()
 {
     return { then: function()
     {
@@ -128,7 +128,7 @@ $.ajax = function()
         return $;
     } };
 };
-$.getJSON = function()
+$.getJSON  = function()
 {
     return { then: function()
     {
@@ -141,7 +141,7 @@ $.getJSON = function()
         return $;
     } };
 };
-$.get = function()
+$.get      = function()
 {
     return { then: function()
     {
@@ -154,7 +154,7 @@ $.get = function()
         return $;
     } };
 };
-$.post = function()
+$.post     = function()
 {
     return { then: function()
     {
@@ -201,7 +201,7 @@ $.Deferred = function()
     };
     return dfd;
 };
-$.when = function()
+$.when   = function()
 {
     return { then: function()
     {
@@ -214,11 +214,11 @@ $.when = function()
         return $;
     } };
 };
-$.param = function()
+$.param  = function()
 {
     return '';
 };
-$.each = function(obj, fn)
+$.each   = function(obj, fn)
 {
     return obj;
 };
