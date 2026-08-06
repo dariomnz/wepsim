@@ -66,7 +66,7 @@ export async function wepsim_newbie_tour (tour_name)
 
     ws_tour.onbeforechange(function ()
     {
-        newbie_tour1[this.currentStep()].do_before() ;
+        newbie_tour1[this.currentStep() ?? 0].do_before() ;
     }) ;
 
     ws_tour.onexit(function ()
