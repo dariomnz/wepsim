@@ -216,6 +216,8 @@ export function wsweb_change_show_processor()
 
     wepsim_svg_start_drawing() ;
 
+    show_cpuview_view() ;
+
     // add if recording
     simcore_record_append_new('Show processor details',
                               'wsweb_change_show_processor();\n') ;

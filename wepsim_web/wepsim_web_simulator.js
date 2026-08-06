@@ -34,7 +34,7 @@ import { wepsim_show_control_memory, wepsim_show_dbg_mpc } from './wepsim_uielto
 import { wepsim_show_asmdbg_pc, wepsim_show_dbg_ir, showhideAsmElements, asmdbg_update_assembly } from './wepsim_uielto_dbg_asm.js';
 import { wepsim_show_cache_memory } from './wepsim_uielto_cache.js';
 import { wepsim_init_states, wepsim_init_rf, wepsim_show_rf_names } from './wepsim_uielto_registers.js';
-import { show_cpuview_view, cpucu_show_graph, cpucu_show_table } from './wepsim_uipacker_cpu_cu.js';
+import { cpucu_show_graph, cpucu_show_table } from './wepsim_uipacker_cpu_cu.js';
 import { wepsim_notify_warning, wepsim_notify_success, wepsim_notify_error, wepsim_notify_close, wepsim_notify_do_notify } from '../wepsim_core/wepsim_notify.js';
 import { wepsim_preload_fromHash, wepsim_preload_get2hash } from '../wepsim_core/wepsim_preload.js';
 import { wepsim_example_loadSet } from '../wepsim_core/wepsim_example.js';
@@ -98,7 +98,6 @@ export function wepsim_uicfg_restore()
     wsweb_change_workspace_simulator() ;
     wsweb_change_show_processor() ;
     wsweb_set_details('REGISTER_FILE') ;
-    show_cpuview_view() ;
 
     wsweb_set_cpucu_size(get_cfg('CPUCU_size')) ;
     wsweb_set_c1c2_size(get_cfg('C1C2_size')) ;

@@ -440,7 +440,8 @@ export function eventhandler_load_svg_set_darkmode(obj)
     {
         return ;
     }
-    obj_target.img_first = false ;
+    obj_target.img_first           = false ;
+    obj_target.img_loading_visible = false ;
 
     obj_target.style.setProperty('visibility', 'visible') ;
     obj_target.style.setProperty('display', 'none') ;
@@ -450,6 +451,17 @@ export function eventhandler_load_svg_set_darkmode(obj)
         {
             obj_target.style.setProperty('display', 'block');
         }, 25);
+    }
+}
+
+export function eventhandler_load_svg_onerror(obj)
+{
+    var obj_target = obj.target ;
+
+    // allow a later reload with the same URL to be attempted again
+    if (obj_target !== null)
+    {
+        obj_target.img_loading_visible = false ;
     }
 }
 
@@ -491,9 +503,9 @@ export function wepsim_svg_reload(id_arr, img_arr)
             set_ab_size('#eltos_cpu_a', '#eltos_cpu_b', 14) ;
         }
 
-        // skip reload if the same URL is already loaded
+        // skip reload if the same URL is already loaded, or its load is already in-flight (visible)
         var curUrl = (o.getAttribute('data') || '').split('?')[0];
-        if (curUrl === img_arr[i].trim())
+        if (curUrl === img_arr[i].trim() && (o.img_first === false || o.img_loading_visible === true))
             continue;
 
         // show loading placeholder
@@ -503,9 +515,11 @@ export function wepsim_svg_reload(id_arr, img_arr)
         // set dark-mode after load
         o.style.setProperty('visibility', 'hidden') ;
         o.style.setProperty('display', 'block') ;
-        o.img_data  = img_arr[i].trim() ;
-        o.img_first = true ;
+        o.img_data            = img_arr[i].trim() ;
+        o.img_first           = true ;
+        o.img_loading_visible = (o.offsetParent !== null) ;
         o.addEventListener('load', eventhandler_load_svg_set_darkmode, false) ;
+        o.addEventListener('error', eventhandler_load_svg_onerror, false) ;
 
         // load image
         o.setAttribute('data', d) ;
