@@ -18,7 +18,8 @@
  *
  */
 
-import { dispatch, onClick } from './wepsim_web_actions.js';
+import { onClick } from './wepsim_web_actions.js';
+import { ws_uielto } from './wepsim_uielto.js';
 import { wepsim_save_to_file } from '../wepsim_core/wepsim_url.js';
 import { wepsim_notify_success } from '../wepsim_core/wepsim_notify.js';
 import { get_simware } from '../sim_core/sim_adt_core.js';
@@ -63,7 +64,7 @@ var saveOptionHandlers = {
     },
 };
 
-export class ws_save_files_option extends HTMLElement
+export class ws_save_files_option extends ws_uielto
 {
     static get observedAttributes()
     {
@@ -102,28 +103,6 @@ export class ws_save_files_option extends HTMLElement
         this.innerHTML = o1 ;
     }
 
-    bindElements ()
-    {
-        this.addEventListener('click', (e) =>
-        {
-            const el = e.target.closest('[data-bind="click"]');
-            if (!el) return;
-            e.preventDefault();
-            if (dispatch('click', el, this, e)) e.stopPropagation();
-        });
-    }
-
-    connectedCallback ()
-    {
-        this.render('connectedCallback') ;
-        this.bindElements();
-    }
-
-    attributeChangedCallback (name, oldValue, newValue)
-    {
-        this.render('attributeChangedCallback') ;
-    }
-
     get fid ()
     {
         return this.getAttribute('fid') ;
@@ -159,7 +138,7 @@ export class ws_save_files_option extends HTMLElement
 // ws_save_files::ws_save_files_option
 //
 
-export class ws_save_files extends HTMLElement
+export class ws_save_files extends ws_uielto
 {
     static get observedAttributes()
     {
@@ -261,27 +240,6 @@ export class ws_save_files extends HTMLElement
                 if (handler) handler(el, host);
             }
         });
-    }
-
-    bindElements ()
-    {
-        this.addEventListener('click', (e) =>
-        {
-            const el = e.target.closest('[data-bind="click"]');
-            if (!el) return;
-            e.preventDefault();
-            if (dispatch('click', el, this, e)) e.stopPropagation();
-        });
-    }
-
-    connectedCallback ()
-    {
-        this.bindElements();
-    }
-
-    attributeChangedCallback (name, oldValue, newValue)
-    {
-        this.render('attributeChangedCallback') ;
     }
 
     get fid ()

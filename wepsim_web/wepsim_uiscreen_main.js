@@ -18,11 +18,8 @@
  *
  */
 import $ from 'jquery';
-import { ws_uielto, register_uielto } from './wepsim_uielto.js';
-import { simcore_init, simcore_welcome } from '../sim_core/sim_api_core.js';
-import { is_cfg_empty, get_cfg, upgrade_cfg } from '../sim_core/sim_cfg.js';
-import { wepsim_example_reset } from '../wepsim_core/wepsim_example.js';
-import { wepsim_general_exception_handler, wepsim_init_default, wepsim_init_ui } from './wepsim_web_simulator.js';
+import { ws_uielto } from './wepsim_uielto.js';
+import { is_cfg_empty, get_cfg } from '../sim_core/sim_cfg.js';
 
 /*
          *  Simulation main
@@ -104,21 +101,6 @@ export class ws_web_main extends ws_uielto
         {
             return ;
         }
-
-        // ...and full initialization after jquery-ready
-        $(document).ready(async function()
-        {
-            // try
-            // {
-            await wepsim_init_ui() ;
-            wepsim_example_reset() ;
-            await wepsim_init_default() ;
-            // }
-            // catch(err)
-            // {
-            // wepsim_general_exception_handler(err) ;
-            // }
-        }) ;
     }
 }
 

@@ -18,9 +18,9 @@
  *
  */
 
-import { dispatch } from './wepsim_web_actions.js';
+import { ws_uielto } from './wepsim_uielto.js';
 
-export class ws_load_link extends HTMLElement
+export class ws_load_link extends ws_uielto
 {
     static get observedAttributes()
     {
@@ -66,28 +66,6 @@ export class ws_load_link extends HTMLElement
             '</div>' ;
 
         this.innerHTML = o1 ;
-    }
-
-    bindElements ()
-    {
-        this.addEventListener('click', (e) =>
-        {
-            const el = e.target.closest('[data-bind="click"]');
-            if (!el) return;
-            e.preventDefault();
-            if (dispatch('click', el, this, e)) e.stopPropagation();
-        });
-    }
-
-    connectedCallback ()
-    {
-        this.render('connectedCallback') ;
-        this.bindElements();
-    }
-
-    attributeChangedCallback (name, oldValue, newValue)
-    {
-        this.render('attributeChangedCallback') ;
     }
 
     get fid ()

@@ -13,10 +13,11 @@ import { get_cfg, upgrade_cfg } from '../../sim_core/sim_cfg.js';
 import { wepsim_register_core } from '../../wepsim_core/wepsim_register_core.js';
 import { i18n_init } from '../../wepsim_i18n/i18n.js';
 import { simhw_get_processor_names } from '../../sim_hw/sim_hw_lazy.js';
-import { wepsim_init_firefoxOS } from '../../wepsim_web/wepsim_web_simulator.js';
+import { wepsim_init_default, wepsim_init_firefoxOS, wepsim_init_ui } from '../../wepsim_web/wepsim_web_simulator.js';
 import { simcore_sound_init } from '../../sim_core/sim_core_sound.js';
+import { wepsim_example_reset } from '../../wepsim_core/wepsim_example.js';
 
-var WSL_TOTAL = 6 + WSL_COMPONENTS_LENGTH;
+var WSL_TOTAL = 6 + WSL_COMPONENTS_LENGTH + 3;
 
 export async function wsl_update_progress(current, total)
 {
@@ -64,9 +65,17 @@ catch (err)
 }
 
 // UI init
-$(document).ready(function ()
+$(document).ready(async function ()
 {
-    $('#ws_loader').hide();
+    await wsl_update_progress(WSL_TOTAL - 3, WSL_TOTAL);
+    await wepsim_init_ui() ;
+
+    await wsl_update_progress(WSL_TOTAL - 2, WSL_TOTAL);
+    wepsim_example_reset() ;
+
+    await wsl_update_progress(WSL_TOTAL - 1, WSL_TOTAL);
+    await wepsim_init_default() ;
+    $('#ws_loader').hide() ;
 });
 
 // TODO: think if necesary with electron

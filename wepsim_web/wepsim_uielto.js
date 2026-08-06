@@ -91,8 +91,10 @@ export class ws_uielto extends HTMLElement
 
     attributeChangedCallback (name, oldValue, newValue)
     {
-        if (oldValue != newValue)
+        if (oldValue != newValue && this.elto_initialized)
+        {
             this.render('attributeChangedCallback') ;
+        }
     }
 
     // attributes

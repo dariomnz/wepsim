@@ -18,11 +18,12 @@
  *
  */
 
-import { dispatch, onClick } from './wepsim_web_actions.js';
+import { onClick } from './wepsim_web_actions.js';
+import { ws_uielto } from './wepsim_uielto.js';
 import { wepsim_checkpoint_get, wepsim_checkpoint_save } from '../wepsim_core/wepsim_checkpoint.js';
 import { wepsim_notify_success } from '../wepsim_core/wepsim_notify.js';
 
-export class ws_save_file extends HTMLElement
+export class ws_save_file extends ws_uielto
 {
     static get observedAttributes()
     {
@@ -88,28 +89,6 @@ export class ws_save_file extends HTMLElement
                 return;
             }
         });
-    }
-
-    bindElements ()
-    {
-        this.addEventListener('click', (e) =>
-        {
-            const el = e.target.closest('[data-bind="click"]');
-            if (!el) return;
-            e.preventDefault();
-            if (dispatch('click', el, this, e)) e.stopPropagation();
-        });
-    }
-
-    connectedCallback ()
-    {
-        this.render('connectedCallback') ;
-        this.bindElements();
-    }
-
-    attributeChangedCallback (name, oldValue, newValue)
-    {
-        this.render('attributeChangedCallback') ;
     }
 
     get fid ()

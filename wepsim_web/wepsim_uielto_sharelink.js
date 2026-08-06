@@ -20,6 +20,8 @@
 
 import $ from 'jquery';
 import QRCode from 'qrcode';
+import { ws_uielto } from './wepsim_uielto.js';
+import { onClick } from './wepsim_web_actions.js';
 import { share_as_uri, share_information } from '../wepsim_core/wepsim_share.js';
 import { wait_if_uievents } from '../sim_core/sim_core_ctrl.js';
 import { wepsim_notify_success } from '../wepsim_core/wepsim_notify.js';
@@ -29,7 +31,7 @@ import { wepsim_notify_success } from '../wepsim_core/wepsim_notify.js';
          */
 
 /* jshint esversion: 6 */
-export class ws_share_link extends HTMLElement
+export class ws_share_link extends ws_uielto
 {
     static get observedAttributes()
     {
@@ -67,21 +69,39 @@ export class ws_share_link extends HTMLElement
             " <h5 class='m-0'>" +
             " <span class='text-white bg-secondary' data-langkey='Link'>Link</span>" +
             " <button class='btn bg-body-tertiary mx-1 float-end py-0 col-auto' " +
-            "         data-bind='click' data-action='share'><span data-langkey='Share'>Share</span></button>" +
+            "         data-bind='click' data-action='sharelink-share'><span data-langkey='Share'>Share</span></button>" +
             " <button class='btn bg-body-tertiary mx-1 float-end py-0 col-auto' " +
-            "         data-bind='click' data-action='copy'><span data-langkey='Copy'>Copy</span></button>" +
+            "         data-bind='click' data-action='sharelink-copy'><span data-langkey='Copy'>Copy</span></button>" +
             ' </h5>' +
             '</div>' +
             "<div class='card-body p-2'>" +
             'You can use the following link:<br>' +
             '<input id="qrcode2" class="form-control" type="text" readonly ' +
-            '       data-bind="click" data-action="textarea-copy" ' +
+            '       data-bind="click" data-action="sharelink-textarea-copy" ' +
             '       value="Loading..." />' +
             '<canvas id="qrcode1" class="mx-auto d-block" style="width:90%;aspect-ratio:1"></canvas>' +
             '</div>' +
             '</div>' ;
 
         this.innerHTML = o1 ;
+
+        onClick('sharelink-share', (el) =>
+        {
+            var c = document.getElementById('qrcode2').value;
+            share_information('share', 'title', 'text', c);
+        });
+
+        onClick('sharelink-copy', (el) =>
+        {
+            var c2 = document.getElementById('qrcode2').value;
+            navigator.clipboard.writeText(c2);
+            wepsim_notify_success('<strong>INFO</strong>', 'Copied to clipboard!');
+        });
+
+        onClick('sharelink-textarea-copy', (el) =>
+        {
+            navigator.clipboard.writeText(el.value);
+        });
 
         // get URL and QR
         var this_jshare = this.jshare ;
@@ -112,42 +132,6 @@ export class ws_share_link extends HTMLElement
                 if (el) el.style.display = 'none' ;
             }
         }, 200) ;
-    }
-
-    bindElements ()
-    {
-        this.addEventListener('click', (e) =>
-        {
-            const el = e.target.closest('[data-bind="click"]');
-            if (!el) return;
-            e.preventDefault();
-            switch (el.dataset.action)
-            {
-                case 'share':
-                    var c = document.getElementById('qrcode2').value;
-                    share_information('share', 'title', 'text', c);
-                    break;
-                case 'copy':
-                    var c2 = document.getElementById('qrcode2').value;
-                    navigator.clipboard.writeText(c2);
-                    wepsim_notify_success('<strong>INFO</strong>', 'Copied to clipboard!');
-                    break;
-                case 'textarea-copy':
-                    navigator.clipboard.writeText(el.value);
-                    break;
-            }
-        });
-    }
-
-    connectedCallback ()
-    {
-        this.render('connectedCallback') ;
-        this.bindElements();
-    }
-
-    attributeChangedCallback (name, oldValue, newValue)
-    {
-        this.render('attributeChangedCallback') ;
     }
 
     get fid ()

@@ -166,7 +166,6 @@ export function cpucu_show_graph()
 
 export function cpucu_show_table(eltos_to_show)
 {
-    $('#infohw1').attr('components', '') ;
     $('#infohw1').attr('components', eltos_to_show) ;
 
     var ws_idiom = get_cfg('ws_idiom') ;
